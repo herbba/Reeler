@@ -1,0 +1,3 @@
+[submodule "lazygit"]
+	path = lazygit
+	url = https://github.com/jesseduffield/lazygit.git
