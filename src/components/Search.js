@@ -20,9 +20,10 @@ class Search extends React.Component {
       message: '',
       totalResults: 0,
       totalPages: 0,
-      currentPageNo: 0
+      currentPageNo: 0,
+      search: false,
     };
-
+    this.handleMenu = this.handleMenu.bind(this);
     this.cancel = '';
   }
 
@@ -84,20 +85,21 @@ class Search extends React.Component {
   };
 
   handleOnInputChange = event => {
-    console.log('jee')
-    const query = event.target.value;
-    if (!query) {
-      this.setState({
-        query,
-        results: {},
-        message: '',
-        totalPages: 0,
-        totalResults: 0
-      });
-    } else {
-      this.setState({ query, loading: true, message: '' }, () => {
-        this.fetchSearchResults(1, query);
-      });
+    if (event.keyCode === 13) {
+      const query = event.target.value;
+      if (!query) {
+        this.setState({
+          query,
+          results: {},
+          message: '',
+          totalPages: 0,
+          totalResults: 0
+        });
+      } else {
+        this.setState({ query, loading: true, message: '', search: true }, () => {
+          this.fetchSearchResults(1, query);
+        });
+      }
     }
   };
 
@@ -120,6 +122,14 @@ class Search extends React.Component {
     }
   };
 
+
+  handleMenu() {
+    this.setState({
+      search : false,
+      results : {}
+    })
+  };
+
   renderSearchResults = () => {
     const { results } = this.state;
 
@@ -129,34 +139,34 @@ class Search extends React.Component {
   };
 
   render() {
-    const { query, loading, message, currentPageNo, totalPages } = this.state;
+    const { query, loading, message, currentPageNo, totalPages, search } = this.state;
 
     const showPrevLink = 1 < currentPageNo;
     const showNextLink = totalPages > currentPageNo;
 
     return (
       <div className='container'>
-
         <div className='palkki'>
-
         </div>
-
         <div className='header'>
-          <img className='menu' src={Menu} alt='menu'></img>
-          <div className='content'>
+          <img className='menu' src={Menu} alt='menu'
+          onClick={this.handleMenu}></img>
+          <div className={`content ${search ? 'ylos' : 'alas'}`}>
             {/*	Heading*/}
             <div>
-              <img className='logo' src={Logo} alt="Logo"></img>
+              <img 
+              className={`logo ${search ? 'hide' : 'show'}`}
+              src={Logo} alt="Logo"></img>
             </div>
             {/* Search Input*/}
-            <label className='search-label' htmlFor='search-input'>
+            <label className='search-label'
+            htmlFor='search-input'>
               <input
                 type='text'
                 name='query'
-                value={query}
-                id='search-input'
+                id={`search-input${search? '-up' : '-down'}`}
                 placeholder='Search...'
-                onChange={this.handleOnInputChange}
+                onKeyDown={this.handleOnInputChange}
               />
               <i className='fa fa-search search-icon' aria-hidden='true' />
             </label>
