@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import '../Search.css';
 import Loader from '../loader.gif';
+import Logo from '../images/logo.png';
+import Menu from '../images/menu.png';
 import PageNavigation from './PageNavigation';
 import movieService from '../services/movies';
 import cancelService from '../services/cancel';
@@ -90,19 +92,23 @@ const Search = () => {
   };
 
   const handleOnInputChange = event => {
-    const query = event.target.value;
-    console.log(query);
-    if (!query) {
-      console.log('!query');
-      setResults({});
-      setMessage('');
-      setTotalPages(0);
-      setTotalResults(0);
-    } else {
-      console.log('query');
-      setLoading(true);
-      setMessage('');
-      fetchSearchResults(1, query);
+    if (event.keyCode === 13) {
+      const query = event.target.value;
+
+      console.log(query);
+      if (!query) {
+        console.log('!query');
+        setResults({});
+        setMessage('');
+        setTotalPages(0);
+        setTotalResults(0);
+      } else {
+        console.log('query');
+        setLoading(true);
+        setMessage('');
+        setSearch(true);
+        fetchSearchResults(1, query);
+      }
     }
   };
 
@@ -129,10 +135,10 @@ const Search = () => {
     console.log('item', item);
     if (itemIsMovie === true) {
       return (
-        <div>
+        <>
           <button onClick={() => setItem(null)}>back</button>
           <MoviePage mov={item} />
-        </div>
+        </>
       );
     } else {
       return <ActorPage actor={item} />;
@@ -148,7 +154,7 @@ const Search = () => {
   const showSearchResults = () => {
     if (Object.keys(results).length && results.length) {
       return (
-        <div>
+        <>
           <PageNavigation
             loading={loading}
             showPrevLink={showPrevLink}
@@ -164,7 +170,7 @@ const Search = () => {
             handlePrevClick={() => handlePageClick('prev')}
             handleNextClick={() => handlePageClick('next')}
           />
-        </div>
+        </>
       );
     }
   };
@@ -181,13 +187,17 @@ const Search = () => {
     <div className='container'>
       <div className='palkki'></div>
       <div className='header'>
-        <img
-          className='menu'
-          src={Menu}
-          alt='menu'
-          onClick={this.handleMenu}
-        ></img>
+        <img className='menu' src={Menu} alt='menu' onClick={handleMenu}></img>
         <div className={`content ${search ? 'ylos' : 'alas'}`}>
+          {/*	Heading*/}
+          <div>
+            <img
+              className={`logo ${search ? 'hide' : 'show'}`}
+              src={Logo}
+              alt='Logo'
+            ></img>
+          </div>
+          {/* Search Input*/}
           <label className='search-label' htmlFor='search-input'>
             <input
               type='text'
@@ -201,6 +211,7 @@ const Search = () => {
         </div>
         <div className='login'>Log in</div>
       </div>
+
       {/*	Error Message*/}
       {message && <p className='message'>{message}</p>}
       {/*	Loader*/}

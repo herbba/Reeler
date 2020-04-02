@@ -3,7 +3,7 @@ import React from 'react';
 import '../Search.css';
 
 const SearchResult = ({ results, onItemClick }) => {
-  const testMovies = [
+  /* const testMovies = [
     {
       id: 12345,
       titleType: 'title type',
@@ -64,7 +64,7 @@ const SearchResult = ({ results, onItemClick }) => {
       primaryProfession: ['profession1', 'profession2'],
       knownForTitles: ['movie1', 'movie2', 'series1']
     }
-  ];
+  ]; */
   /*
     MOVIE {
     id: string,
@@ -92,7 +92,7 @@ const SearchResult = ({ results, onItemClick }) => {
   const mapPlaceholder = () =>
     results.map(result => (
       <li key={result.id}>
-        <button
+        <p
           onClick={e =>
             onItemClick(
               {
@@ -112,18 +112,18 @@ const SearchResult = ({ results, onItemClick }) => {
           }
         >
           {result.user}
-        </button>
+        </p>
       </li>
     ));
 
-  //kutsu näin: <ul>{mapPlaceholder()}</ul>
+  /* //kutsu näin: <ul>{mapPlaceholder()}</ul>
   const mapMovieResults = () =>
     testMovies.map(movie => (
       <li key={movie.id}>
         person
-        {/* <button onClick={onClick(movie, true)}>
+         <button onClick={onClick(movie, true)}>
           {movie.primaryTitle} ({movie.startYear})
-        </button> */}
+        </button> 
       </li>
     ));
 
@@ -131,9 +131,9 @@ const SearchResult = ({ results, onItemClick }) => {
     testPersons.map(person => (
       <li key={person.id}>
         person
-        {/* <button onClick={onClick(person, false)}>{person.primaryName}</button> */}
+        <button onClick={onClick(person, false)}>{person.primaryName}</button> 
       </li>
-    ));
+    )); */
 
   return (
     <>
