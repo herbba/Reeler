@@ -20,6 +20,7 @@ const Search = () => {
   const [item, setItem] = useState(null);
   const [itemIsMovie, setItemIsMovie] = useState(true);
   const [cancel, setCancel] = useState('');
+  const [search, setSearch] = useState(false);
 
   /**
    * Get the Total Pages count.
@@ -168,25 +169,38 @@ const Search = () => {
     }
   };
 
+  const handleMenu = () => {
+    setSearch(false);
+    setResults({});
+  };
+
   const showPrevLink = 1 < currentPageNo;
   const showNextLink = totalPages > currentPageNo;
 
   return (
     <div className='container'>
-      {/*	Heading*/}
-      <h2 className='heading'>REELER</h2>
-      {/* Search Input*/}
-      <label className='search-label' htmlFor='search-input'>
-        <input
-          type='text'
-          name='query'
-          value={query}
-          id='search-input'
-          placeholder='Search...'
-          onChange={handleOnInputChange}
-        />
-        <i className='fa fa-search search-icon' aria-hidden='true' />
-      </label>
+      <div className='palkki'></div>
+      <div className='header'>
+        <img
+          className='menu'
+          src={Menu}
+          alt='menu'
+          onClick={this.handleMenu}
+        ></img>
+        <div className={`content ${search ? 'ylos' : 'alas'}`}>
+          <label className='search-label' htmlFor='search-input'>
+            <input
+              type='text'
+              name='query'
+              id={`search-input${search ? '-up' : '-down'}`}
+              placeholder='Search...'
+              onKeyDown={handleOnInputChange}
+            />
+            <i className='fa fa-search search-icon' aria-hidden='true' />
+          </label>
+        </div>
+        <div className='login'>Log in</div>
+      </div>
       {/*	Error Message*/}
       {message && <p className='message'>{message}</p>}
       {/*	Loader*/}
