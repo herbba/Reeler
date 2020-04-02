@@ -20,10 +20,12 @@ class Search extends React.Component {
       message: '',
       totalResults: 0,
       totalPages: 0,
+
       currentPageNo: 0,
       search: false,
     };
     this.handleMenu = this.handleMenu.bind(this);
+
     this.cancel = '';
   }
 
@@ -85,6 +87,7 @@ class Search extends React.Component {
   };
 
   handleOnInputChange = event => {
+
     if (event.keyCode === 13) {
       const query = event.target.value;
       if (!query) {
@@ -100,6 +103,7 @@ class Search extends React.Component {
           this.fetchSearchResults(1, query);
         });
       }
+
     }
   };
 
@@ -123,12 +127,14 @@ class Search extends React.Component {
   };
 
 
+
   handleMenu() {
     this.setState({
       search : false,
       results : {}
     })
   };
+
 
   renderSearchResults = () => {
     const { results } = this.state;
@@ -139,13 +145,16 @@ class Search extends React.Component {
   };
 
   render() {
+
     const { query, loading, message, currentPageNo, totalPages, search } = this.state;
+
 
     const showPrevLink = 1 < currentPageNo;
     const showNextLink = totalPages > currentPageNo;
 
     return (
       <div className='container'>
+
         <div className='palkki'>
         </div>
         <div className='header'>
@@ -173,6 +182,7 @@ class Search extends React.Component {
           </div>
           <div className='login'>Log in</div>
         </div>
+
 
         {/*	Error Message*/}
         {message && <p className='message'>{message}</p>}
