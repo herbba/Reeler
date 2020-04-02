@@ -93,6 +93,7 @@ const SearchResult = ({ results, onItemClick }) => {
     results.map(result => (
       <li key={result.id}>
         <p
+          className='resultItem'
           onClick={e =>
             onItemClick(
               {
@@ -136,10 +137,10 @@ const SearchResult = ({ results, onItemClick }) => {
     )); */
 
   return (
-    <>
+    <div className='results'>
       <h3>Movies</h3>
       <ul>{mapPlaceholder()}</ul>
-    </>
+    </div>
   );
 };
 

@@ -118,7 +118,7 @@ h3 {
   padding-top: 30px;
 }
 
-p {
+.resultItem {
   text-align: left;
   padding-left: 50px;
   cursor: pointer;

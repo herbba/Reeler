@@ -47,43 +47,30 @@ const Search = () => {
    */
   const fetchSearchResults = (updatedPageNo = '', query) => {
     const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
-    console.log('pagenumber', pageNumber);
+
     //const searchUrl = `https://pixabay.com/api/?key=15763483-e44bd7d1a782b77b7b8429d3f&q=${query}${pageNumber}`;
     //const searchUrl = `/v1/search?q=${query}${pageNumber}`;
 
     if (cancel) {
-      console.log('cancel', cancel);
       cancel.cancel();
     }
 
     setCancel(cancelService.cancelToken);
-    console.log('cancel', cancel);
 
     movieService
       .getMovie(query, pageNumber)
       .then(res => {
         const total = res.total;
-        console.log('total', total);
         const totalPagesCount = getPageCount(total, 20);
-        console.log('totalPagesCount', totalPagesCount);
         const resultNotFoundMsg = !res.hits.length ? 'ei oo mitään muuta' : '';
-        console.log('resultsNotFoundMsg', resultNotFoundMsg);
-        console.log('res.hits', res.hits);
         setResults(res.hits);
-        console.log('setresults', results);
         setMessage(resultNotFoundMsg);
-        console.log('setmessage', message);
         setTotalResults(total);
-        console.log('setTotals', totalResults);
         setTotalPages(totalPagesCount);
-        console.log('settotalPages', totalPages);
         setCurrentPageNo(updatedPageNo);
-        console.log('setCurrentPageno', currentPageNo);
         setLoading(false);
-        console.log('setLoading', loading);
       })
       .catch(error => {
-        console.log('Catch', error);
         if (cancelService.isCancel(error) || error) {
           setLoading(false);
           setMessage('EI LÖYTYNY DATAA');
@@ -95,15 +82,12 @@ const Search = () => {
     if (event.keyCode === 13) {
       const query = event.target.value;
 
-      console.log(query);
       if (!query) {
-        console.log('!query');
         setResults({});
         setMessage('');
         setTotalPages(0);
         setTotalResults(0);
       } else {
-        console.log('query');
         setLoading(true);
         setMessage('');
         setSearch(true);
@@ -185,7 +169,7 @@ const Search = () => {
 
   return (
     <div className='container'>
-      <div className='palkki'></div>
+      <div className='palkki' />
       <div className='header'>
         <img className='menu' src={Menu} alt='menu' onClick={handleMenu}></img>
         <div className={`content ${search ? 'ylos' : 'alas'}`}>
@@ -214,12 +198,14 @@ const Search = () => {
 
       {/*	Error Message*/}
       {message && <p className='message'>{message}</p>}
+
       {/*	Loader*/}
       <img
         src={Loader}
         className={`search-loading ${loading ? 'show' : 'hide'}`}
         alt='loader'
       />
+      {/* Results or MoviePage */}
       {item === null ? showSearchResults() : showItem()}
     </div>
   );
