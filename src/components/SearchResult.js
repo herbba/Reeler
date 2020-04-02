@@ -2,7 +2,7 @@
 import React from 'react';
 import '../Search.css';
 
-const SearchResult = ({ results }) => {
+const SearchResult = ({ results, onItemClick }) => {
   const testMovies = [
     {
       id: 12345,
@@ -49,7 +49,7 @@ const SearchResult = ({ results }) => {
       knownForTitles: ['movie1', 'movie2', 'series1']
     },
     {
-      id: 54321,
+      id: 64321,
       primaryName: 'primary name 2',
       birthYear: 1980,
       deathYear: null,
@@ -57,7 +57,7 @@ const SearchResult = ({ results }) => {
       knownForTitles: ['movie1', 'movie2', 'series1']
     },
     {
-      id: 54321,
+      id: 74321,
       primaryName: 'primary name 3',
       birthYear: 1980,
       deathYear: null,
@@ -91,41 +91,54 @@ const SearchResult = ({ results }) => {
 
   const mapPlaceholder = () =>
     results.map(result => (
-      <a key={result.id} href={result.previewURL} className='result-item'>
-        <h6 className='image-username'>{result.user}</h6>
-        <div className='image-wrapper'>
-          <img
-            className='image'
-            src={result.previewURL}
-            alt={`${result.username} image`}
-          />
-        </div>
-      </a>
+      <li key={result.id}>
+        <button
+          onClick={e =>
+            onItemClick(
+              {
+                id: result.id,
+                titleType: result.type,
+                primaryTitle: result.user,
+                originalTitle: result.largeImageURL,
+                isAdult: true,
+                startYear: result.previewWidth,
+                endYear: null,
+                runTimeMinutes: result.webFormatWidth,
+                genres: result.tags
+              },
+              true,
+              e
+            )
+          }
+        >
+          {result.user}
+        </button>
+      </li>
     ));
 
   //kutsu näin: <ul>{mapPlaceholder()}</ul>
   const mapMovieResults = () =>
     testMovies.map(movie => (
       <li key={movie.id}>
-        <p>
+        person
+        {/* <button onClick={onClick(movie, true)}>
           {movie.primaryTitle} ({movie.startYear})
-        </p>
+        </button> */}
       </li>
     ));
 
   const mapPersonResults = () =>
     testPersons.map(person => (
       <li key={person.id}>
-        <p>{person.primaryName}</p>
+        person
+        {/* <button onClick={onClick(person, false)}>{person.primaryName}</button> */}
       </li>
     ));
 
   return (
     <>
       <h3>Movies</h3>
-      <ul>{mapMovieResults()}</ul>
-      <h3>Actors</h3>
-      <ul>{mapPersonResults()}</ul>
+      <ul>{mapPlaceholder()}</ul>
     </>
   );
 };

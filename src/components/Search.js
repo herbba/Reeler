@@ -1,28 +1,25 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from 'react';
+import React, { useState } from 'react';
 import '../Search.css';
 import Loader from '../loader.gif';
 import PageNavigation from './PageNavigation';
 import movieService from '../services/movies';
 import cancelService from '../services/cancel';
 import SearchResult from './SearchResult';
+import MoviePage from './MoviePage';
+import ActorPage from './ActorPage';
 
-class Search extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      query: '',
-      results: {},
-      loading: false,
-      message: '',
-      totalResults: 0,
-      totalPages: 0,
-      currentPageNo: 0
-    };
-
-    this.cancel = '';
-  }
+const Search = () => {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [totalResults, setTotalResults] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPageNo, setCurrentPageNo] = useState(0);
+  const [item, setItem] = useState(null);
+  const [itemIsMovie, setItemIsMovie] = useState(true);
+  const [cancel, setCancel] = useState('');
 
   /**
    * Get the Total Pages count.
@@ -31,7 +28,7 @@ class Search extends React.Component {
    * @param denominator Count of results per page
    * @return {number}
    */
-  getPageCount = (total, denominator) => {
+  const getPageCount = (total, denominator) => {
     const divisible = 0 === total % denominator;
     const valueToBeAdded = divisible ? 0 : 1;
     return Math.floor(total / denominator) + valueToBeAdded;
@@ -45,56 +42,66 @@ class Search extends React.Component {
    * @param {String} query Search Query.
    *
    */
-  fetchSearchResults = (updatedPageNo = '', query) => {
+  const fetchSearchResults = (updatedPageNo = '', query) => {
     const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
+    console.log('pagenumber', pageNumber);
     //const searchUrl = `https://pixabay.com/api/?key=15763483-e44bd7d1a782b77b7b8429d3f&q=${query}${pageNumber}`;
     //const searchUrl = `/v1/search?q=${query}${pageNumber}`;
 
-    if (this.cancel) {
-      this.cancel.cancel();
+    if (cancel) {
+      console.log('cancel', cancel);
+      cancel.cancel();
     }
 
-    this.cancel = cancelService.cancelToken;
+    setCancel(cancelService.cancelToken);
+    console.log('cancel', cancel);
 
     movieService
       .getMovie(query, pageNumber)
       .then(res => {
         const total = res.total;
-        const totalPagesCount = this.getPageCount(total, 20);
+        console.log('total', total);
+        const totalPagesCount = getPageCount(total, 20);
+        console.log('totalPagesCount', totalPagesCount);
         const resultNotFoundMsg = !res.hits.length ? 'ei oo mitään muuta' : '';
-        this.setState({
-          results: res.hits,
-          message: resultNotFoundMsg,
-          totalResults: total,
-          totalPages: totalPagesCount,
-          currentPageNo: updatedPageNo,
-          loading: false
-        });
+        console.log('resultsNotFoundMsg', resultNotFoundMsg);
+        console.log('res.hits', res.hits);
+        setResults(res.hits);
+        console.log('setresults', results);
+        setMessage(resultNotFoundMsg);
+        console.log('setmessage', message);
+        setTotalResults(total);
+        console.log('setTotals', totalResults);
+        setTotalPages(totalPagesCount);
+        console.log('settotalPages', totalPages);
+        setCurrentPageNo(updatedPageNo);
+        console.log('setCurrentPageno', currentPageNo);
+        setLoading(false);
+        console.log('setLoading', loading);
       })
       .catch(error => {
+        console.log('Catch', error);
         if (cancelService.isCancel(error) || error) {
-          this.setState({
-            loading: false,
-            message: 'EI LÖYTYNY DATAA'
-          });
+          setLoading(false);
+          setMessage('EI LÖYTYNY DATAA');
         }
       });
   };
 
-  handleOnInputChange = event => {
+  const handleOnInputChange = event => {
     const query = event.target.value;
+    console.log(query);
     if (!query) {
-      this.setState({
-        query,
-        results: {},
-        message: '',
-        totalPages: 0,
-        totalResults: 0
-      });
+      console.log('!query');
+      setResults({});
+      setMessage('');
+      setTotalPages(0);
+      setTotalResults(0);
     } else {
-      this.setState({ query, loading: true, message: '' }, () => {
-        this.fetchSearchResults(1, query);
-      });
+      console.log('query');
+      setLoading(true);
+      setMessage('');
+      fetchSearchResults(1, query);
     }
   };
 
@@ -103,84 +110,94 @@ class Search extends React.Component {
    *
    * @param {String} type 'prev' or 'next'
    */
-  handlePageClick = type => {
+  const handlePageClick = type => {
     //event.preventDefault();
     const updatePageNo =
       'prev' === type
-        ? this.state.currentPageNo - 1
-        : this.state.currentPageNo + 1;
+        ? setCurrentPageNo(currentPageNo - 1)
+        : setCurrentPageNo(currentPageNo + 1);
 
-    if (!this.state.loading) {
-      this.setState({ loading: true, message: '' }, () => {
-        this.fetchSearchResults(updatePageNo, this.state.query);
-      });
+    if (!loading) {
+      setLoading(true);
+      setMessage('');
+      fetchSearchResults(updatePageNo, query);
     }
   };
 
-  renderSearchResults = () => {
-    const { results } = this.state;
+  const showItem = () => {
+    console.log('item', item);
+    if (itemIsMovie === true) {
+      return (
+        <div>
+          <button onClick={() => setItem(null)}>back</button>
+          <MoviePage mov={item} />
+        </div>
+      );
+    } else {
+      return <ActorPage actor={item} />;
+    }
+  };
 
+  const itemUpdate = (item, isMovie, e) => {
+    e.preventDefault();
+    setItem(item);
+    setItemIsMovie(isMovie);
+  };
+
+  const showSearchResults = () => {
     if (Object.keys(results).length && results.length) {
-      return <SearchResult results={results} />;
+      return (
+        <div>
+          <PageNavigation
+            loading={loading}
+            showPrevLink={showPrevLink}
+            showNextLink={showNextLink}
+            handlePrevClick={() => handlePageClick('prev')}
+            handleNextClick={() => handlePageClick('next')}
+          />
+          <SearchResult results={results} onItemClick={itemUpdate} />;
+          <PageNavigation
+            loading={loading}
+            showPrevLink={showPrevLink}
+            showNextLink={showNextLink}
+            handlePrevClick={() => handlePageClick('prev')}
+            handleNextClick={() => handlePageClick('next')}
+          />
+        </div>
+      );
     }
   };
 
-  render() {
-    const { query, loading, message, currentPageNo, totalPages } = this.state;
+  const showPrevLink = 1 < currentPageNo;
+  const showNextLink = totalPages > currentPageNo;
 
-    const showPrevLink = 1 < currentPageNo;
-    const showNextLink = totalPages > currentPageNo;
-
-    return (
-      <div className='container'>
-        {/*	Heading*/}
-        <h2 className='heading'>REELER</h2>
-        {/* Search Input*/}
-        <label className='search-label' htmlFor='search-input'>
-          <input
-            type='text'
-            name='query'
-            value={query}
-            id='search-input'
-            placeholder='Search...'
-            onChange={this.handleOnInputChange}
-          />
-          <i className='fa fa-search search-icon' aria-hidden='true' />
-        </label>
-
-        {/*	Error Message*/}
-        {message && <p className='message'>{message}</p>}
-
-        {/*	Loader*/}
-        <img
-          src={Loader}
-          className={`search-loading ${loading ? 'show' : 'hide'}`}
-          alt='loader'
+  return (
+    <div className='container'>
+      {/*	Heading*/}
+      <h2 className='heading'>REELER</h2>
+      {/* Search Input*/}
+      <label className='search-label' htmlFor='search-input'>
+        <input
+          type='text'
+          name='query'
+          value={query}
+          id='search-input'
+          placeholder='Search...'
+          onChange={handleOnInputChange}
         />
-
-        {/*Navigation*/}
-        <PageNavigation
-          loading={loading}
-          showPrevLink={showPrevLink}
-          showNextLink={showNextLink}
-          handlePrevClick={() => this.handlePageClick('prev')}
-          handleNextClick={() => this.handlePageClick('next')}
-        />
-
-        {/*	Result*/}
-        {this.renderSearchResults()}
-
-        {/*Navigation*/}
-        <PageNavigation
-          loading={loading}
-          showPrevLink={showPrevLink}
-          showNextLink={showNextLink}
-          handlePrevClick={() => this.handlePageClick('prev')}
-          handleNextClick={() => this.handlePageClick('next')}
-        />
-      </div>
-    );
-  }
-}
+        <i className='fa fa-search search-icon' aria-hidden='true' />
+      </label>
+      {/*	Error Message*/}
+      {message && <p className='message'>{message}</p>}
+      {/*	Loader*/}
+      <img
+        src={Loader}
+        className={`search-loading ${loading ? 'show' : 'hide'}`}
+        alt='loader'
+      />
+      {item === null ? showSearchResults() : showItem()}
+    </div>
+  );
+};
 
 export default Search;
