@@ -2,6 +2,8 @@
 import React from 'react';
 import '../Search.css';
 import Loader from '../loader.gif';
+import Logo from '../images/logo.png';
+import Menu from '../images/menu.png';
 import PageNavigation from './PageNavigation';
 import movieService from '../services/movies';
 import cancelService from '../services/cancel';
@@ -18,8 +20,11 @@ class Search extends React.Component {
       message: '',
       totalResults: 0,
       totalPages: 0,
-      currentPageNo: 0
+
+      currentPageNo: 0,
+      search: false,
     };
+    this.handleMenu = this.handleMenu.bind(this);
 
     this.cancel = '';
   }
@@ -82,19 +87,23 @@ class Search extends React.Component {
   };
 
   handleOnInputChange = event => {
-    const query = event.target.value;
-    if (!query) {
-      this.setState({
-        query,
-        results: {},
-        message: '',
-        totalPages: 0,
-        totalResults: 0
-      });
-    } else {
-      this.setState({ query, loading: true, message: '' }, () => {
-        this.fetchSearchResults(1, query);
-      });
+
+    if (event.keyCode === 13) {
+      const query = event.target.value;
+      if (!query) {
+        this.setState({
+          query,
+          results: {},
+          message: '',
+          totalPages: 0,
+          totalResults: 0
+        });
+      } else {
+        this.setState({ query, loading: true, message: '', search: true }, () => {
+          this.fetchSearchResults(1, query);
+        });
+      }
+
     }
   };
 
@@ -117,6 +126,16 @@ class Search extends React.Component {
     }
   };
 
+
+
+  handleMenu() {
+    this.setState({
+      search : false,
+      results : {}
+    })
+  };
+
+
   renderSearchResults = () => {
     const { results } = this.state;
 
@@ -126,27 +145,44 @@ class Search extends React.Component {
   };
 
   render() {
-    const { query, loading, message, currentPageNo, totalPages } = this.state;
+
+    const { query, loading, message, currentPageNo, totalPages, search } = this.state;
+
 
     const showPrevLink = 1 < currentPageNo;
     const showNextLink = totalPages > currentPageNo;
 
     return (
       <div className='container'>
-        {/*	Heading*/}
-        <h2 className='heading'>REELER</h2>
-        {/* Search Input*/}
-        <label className='search-label' htmlFor='search-input'>
-          <input
-            type='text'
-            name='query'
-            value={query}
-            id='search-input'
-            placeholder='Search...'
-            onChange={this.handleOnInputChange}
-          />
-          <i className='fa fa-search search-icon' aria-hidden='true' />
-        </label>
+
+        <div className='palkki'>
+        </div>
+        <div className='header'>
+          <img className='menu' src={Menu} alt='menu'
+          onClick={this.handleMenu}></img>
+          <div className={`content ${search ? 'ylos' : 'alas'}`}>
+            {/*	Heading*/}
+            <div>
+              <img 
+              className={`logo ${search ? 'hide' : 'show'}`}
+              src={Logo} alt="Logo"></img>
+            </div>
+            {/* Search Input*/}
+            <label className='search-label'
+            htmlFor='search-input'>
+              <input
+                type='text'
+                name='query'
+                id={`search-input${search? '-up' : '-down'}`}
+                placeholder='Search...'
+                onKeyDown={this.handleOnInputChange}
+              />
+              <i className='fa fa-search search-icon' aria-hidden='true' />
+            </label>
+          </div>
+          <div className='login'>Log in</div>
+        </div>
+
 
         {/*	Error Message*/}
         {message && <p className='message'>{message}</p>}

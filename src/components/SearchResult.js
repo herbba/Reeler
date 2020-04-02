@@ -49,7 +49,9 @@ const SearchResult = ({ results }) => {
       knownForTitles: ['movie1', 'movie2', 'series1']
     },
     {
-      id: 54321,
+
+      id: 54322,
+
       primaryName: 'primary name 2',
       birthYear: 1980,
       deathYear: null,
@@ -57,7 +59,9 @@ const SearchResult = ({ results }) => {
       knownForTitles: ['movie1', 'movie2', 'series1']
     },
     {
-      id: 54321,
+
+      id: 543213,
+
       primaryName: 'primary name 3',
       birthYear: 1980,
       deathYear: null,
@@ -121,12 +125,16 @@ const SearchResult = ({ results }) => {
     ));
 
   return (
-    <>
+
+    <div className='results'>
+
       <h3>Movies</h3>
       <ul>{mapMovieResults()}</ul>
       <h3>Actors</h3>
       <ul>{mapPersonResults()}</ul>
-    </>
+
+    </div>
+
   );
 };
 
