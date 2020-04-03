@@ -1,14 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 
-export default props => {
-  const {
-    loading,
-    showPrevLink,
-    showNextLink,
-    handlePrevClick,
-    handleNextClick
-  } = props;
+const PageNavigation = ({
+  loading,
+  showPrevLink,
+  showNextLink,
+  handlePrevClick,
+  handleNextClick
+}) => {
   return (
     <div className='nav-link-container'>
       <a
@@ -33,3 +32,4 @@ export default props => {
     </div>
   );
 };
+export default PageNavigation;
