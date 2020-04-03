@@ -49,7 +49,9 @@ const SearchResult = ({ results, onItemClick }) => {
       knownForTitles: ['movie1', 'movie2', 'series1']
     },
     {
+
       id: 64321,
+
       primaryName: 'primary name 2',
       birthYear: 1980,
       deathYear: null,
@@ -57,7 +59,9 @@ const SearchResult = ({ results, onItemClick }) => {
       knownForTitles: ['movie1', 'movie2', 'series1']
     },
     {
+
       id: 74321,
+
       primaryName: 'primary name 3',
       birthYear: 1980,
       deathYear: null,
@@ -137,10 +141,12 @@ const SearchResult = ({ results, onItemClick }) => {
     )); */
 
   return (
+
     <div className='results'>
       <h3>Movies</h3>
       <ul>{mapPlaceholder()}</ul>
     </div>
+
   );
 };
 

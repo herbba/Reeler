@@ -8,6 +8,7 @@ import PageNavigation from './PageNavigation';
 import movieService from '../services/movies';
 import cancelService from '../services/cancel';
 import SearchResult from './SearchResult';
+
 import MoviePage from './MoviePage';
 import ActorPage from './ActorPage';
 
@@ -23,6 +24,7 @@ const Search = () => {
   const [itemIsMovie, setItemIsMovie] = useState(true);
   const [cancel, setCancel] = useState('');
   const [search, setSearch] = useState(false);
+
 
   /**
    * Get the Total Pages count.
@@ -78,6 +80,7 @@ const Search = () => {
       });
   };
 
+
   const handleOnInputChange = event => {
     if (event.keyCode === 13) {
       const query = event.target.value;
@@ -93,6 +96,7 @@ const Search = () => {
         setSearch(true);
         fetchSearchResults(1, query);
       }
+
     }
   };
 
@@ -115,6 +119,7 @@ const Search = () => {
     }
   };
 
+
   const showItem = () => {
     console.log('item', item);
     if (itemIsMovie === true) {
@@ -134,6 +139,7 @@ const Search = () => {
     setItem(item);
     setItemIsMovie(isMovie);
   };
+
 
   const showSearchResults = () => {
     if (Object.keys(results).length && results.length) {
@@ -158,6 +164,7 @@ const Search = () => {
       );
     }
   };
+
 
   const handleMenu = () => {
     setSearch(false);
@@ -194,6 +201,7 @@ const Search = () => {
           </label>
         </div>
         <div className='login'>Log in</div>
+
       </div>
 
       {/*	Error Message*/}
