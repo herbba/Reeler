@@ -17,6 +17,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://206.189.28.120:5000/",
   "browserslist": {
     "production": [
       ">0.2%",
