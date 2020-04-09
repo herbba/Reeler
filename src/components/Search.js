@@ -5,8 +5,10 @@ import Loader from '../loader.gif';
 import Logo from '../images/logo.png';
 import Menu from '../images/menu.png';
 import PageNavigation from './PageNavigation';
-import movieService from '../services/movies';
+import searchService from '../services/searchResults';
 import cancelService from '../services/cancel';
+import titleService from '../services/titles';
+import nameService from '../services/names';
 import SearchResult from './SearchResult';
 
 import MoviePage from './MoviePage';
@@ -21,10 +23,9 @@ const Search = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPageNo, setCurrentPageNo] = useState(0);
   const [item, setItem] = useState(null);
-  const [itemIsMovie, setItemIsMovie] = useState(true);
+  const [itemType, setItemType] = useState('true');
   const [cancel, setCancel] = useState('');
   const [search, setSearch] = useState(false);
-
 
   /**
    * Get the Total Pages count.
@@ -48,41 +49,43 @@ const Search = () => {
    *
    */
   const fetchSearchResults = (updatedPageNo = '', query) => {
-    const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
-
-    //const searchUrl = `https://pixabay.com/api/?key=15763483-e44bd7d1a782b77b7b8429d3f&q=${query}${pageNumber}`;
-    //const searchUrl = `/v1/search?q=${query}${pageNumber}`;
+    //const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
 
     if (cancel) {
       cancel.cancel();
     }
 
     setCancel(cancelService.cancelToken);
-
-    movieService
-      .getMovie(query, pageNumber)
-      .then(res => {
-        const total = res.total;
+    console.log('searchService');
+    searchService
+      .getResults(query)
+      .then((res) => {
+        console.log('res', res);
+        const total = 1;
         const totalPagesCount = getPageCount(total, 20);
-        const resultNotFoundMsg = !res.hits.length ? 'ei oo mitään muuta' : '';
-        setResults(res.hits);
+        const resultNotFoundMsg = !res.results.length
+          ? 'ei oo mitään muuta'
+          : '';
+        setResults(res.results);
         setMessage(resultNotFoundMsg);
         setTotalResults(total);
         setTotalPages(totalPagesCount);
         setCurrentPageNo(updatedPageNo);
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         if (cancelService.isCancel(error) || error) {
           setLoading(false);
-          setMessage('EI LÖYTYNY DATAA');
+          setMessage('EI LÖYTYNY DATAA fetchSearchResults');
         }
       });
   };
 
-
-  const handleOnInputChange = event => {
-    if (event.keyCode === 13) {
+  /**
+   * When enter is pressed search results will be fetched
+   */
+  const handleOnInputChange = (event) => {
+    if (event.key === 'Enter') {
       const query = event.target.value;
 
       if (!query) {
@@ -96,7 +99,6 @@ const Search = () => {
         setSearch(true);
         fetchSearchResults(1, query);
       }
-
     }
   };
 
@@ -105,7 +107,7 @@ const Search = () => {
    *
    * @param {String} type 'prev' or 'next'
    */
-  const handlePageClick = type => {
+  const handlePageClick = (type) => {
     //event.preventDefault();
     const updatePageNo =
       'prev' === type
@@ -119,10 +121,14 @@ const Search = () => {
     }
   };
 
-
+  /**
+   * shows current item's information
+   *
+   */
   const showItem = () => {
     console.log('item', item);
-    if (itemIsMovie === true) {
+    if (itemType === 'movie' || 'short' || 'tvseries') {
+      console.log('movie');
       return (
         <>
           <button onClick={() => setItem(null)}>back</button>
@@ -134,14 +140,44 @@ const Search = () => {
     }
   };
 
-  const itemUpdate = (item, isMovie, e) => {
+  /**
+   * Eventhandler for clicking search results
+   * Gets a movie element and sets it to item and updates isMovie
+   *
+   * @param {String} itemId items id ie. tt12456
+   * @param {Boolean} isMovie true if item is movie, false is not.
+   * @param {event} e default event when item is clicked
+   *
+   */
+  const itemUpdate = (itemId, e) => {
     e.preventDefault();
-    setItem(item);
-    setItemIsMovie(isMovie);
+    if (itemId.charAt(0) === 't') {
+      titleService
+        .getTitle(itemId)
+        .then((res) => {
+          setItem(res);
+          setItemType(res.titletype.trim());
+          setLoading(false);
+        })
+        .catch((error) => {
+          if (cancelService.isCancel(error) || error) {
+            setLoading(false);
+            setMessage('EI LÖYTYNY DATAA itemupdate');
+            console.log('itemupdaterror', error);
+          }
+        });
+    } else {
+      //TÄHÄN /names/id:stä hakeminen
+      console.log("Choosing a name doesn't work yet, choose a title instead");
+    }
   };
 
-
+  /**
+   * Displays search results on the page
+   */
   const showSearchResults = () => {
+    console.log('showSearchResults begin');
+    console.log('results', results);
     if (Object.keys(results).length && results.length) {
       return (
         <>
@@ -163,9 +199,12 @@ const Search = () => {
         </>
       );
     }
+    console.log('showSearchResults end');
   };
 
-
+  /**
+   * event handler for clicking on menu
+   */
   const handleMenu = () => {
     setSearch(false);
     setResults({});
@@ -201,7 +240,6 @@ const Search = () => {
           </label>
         </div>
         <div className='login'>Log in</div>
-
       </div>
 
       {/*	Error Message*/}
