@@ -17,9 +17,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
+  "proxy": "http://206.189.28.120:5000/",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -31,5 +29,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "file-loader": "^6.0.0"
   }
 }
