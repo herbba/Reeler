@@ -205,6 +205,16 @@ li {
   padding-left: 50px;
 }
 
+.filmography {
+  text-align: left;
+  padding: 5px 0 5px 25px;
+  color: var(--main-link-color);
+}
+
+li:nth-child(even).filmography {
+  background-color: rgb(213, 213, 213);
+}
+
 .link {
   cursor: pointer;
   color: var(--main-link-color);

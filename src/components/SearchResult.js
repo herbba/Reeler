@@ -45,17 +45,6 @@ const SearchResult = ({ results, onItemClick }) => {
 
   return (
     <div className='results'>
-      {/* <div>
-        <h2>Movies</h2>
-        <ul>{mapMovieResults()}</ul>
-        {movies && movies.length > 4 ? (
-          <p className='resultItem link' onClick={() => loadMore('m')}>
-            More results
-          </p>
-        ) : (
-          <></>
-        )}
-      </div> */}
       {resultDiv('Movies', movies, mVisible)}
       {resultDiv('Actors', actors, aVisible)}
     </div>
