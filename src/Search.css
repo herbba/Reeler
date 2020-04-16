@@ -1,6 +1,11 @@
+:root {
+  --main-bg-color: rgb(249, 248, 248);
+  --darker-bg-color: rgb(245, 245, 242);
+  --link-color: rgb(197, 78, 63);
+}
+
 html,
 body {
-
   height: 100%;
   margin: 0;
   padding: 0;
@@ -10,13 +15,11 @@ body {
   position: absolute;
   left: calc(50vw - 99px);
   top: 20vh;
-
 }
 
 .nav-link-container {
   display: none;
 }
-
 
 .header-up {
   display: flex;
@@ -71,7 +74,8 @@ body {
   justify-content: center;
 }
 
-.login, .register {
+.login,
+.register {
   white-space: nowrap;
   height: 24px;
   padding: 0px 25px;
@@ -83,11 +87,13 @@ body {
   cursor: pointer;
 }
 
-.login:hover, .register:hover {
-  background-color:#bb2604;
+.login:hover,
+.register:hover {
+  background-color: #bb2604;
 }
 
-.login:active, .register:active {
+.login:active,
+.register:active {
   position: relative;
   top: 1px;
 }
@@ -101,13 +107,13 @@ body {
 
 .text {
   margin: 0px 0px 10px 0px;
-  font-size:calc(10px + 1.5vw);
+  font-size: calc(10px + 1.5vw);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: #cd0001;
 }
 
 .hide {
-  display:none;
+  display: none;
 }
 
 .search-bar {
@@ -137,7 +143,6 @@ body {
   outline: none;
 }
 
-
 #search-button-down {
   position: absolute;
   right: 0px;
@@ -166,12 +171,11 @@ body {
   margin: 4px 18px;
   height: 32px;
   cursor: pointer;
-
 }
 
 .results {
-  background-color: white;
-  margin: 0px 15vw 0px 15vw;
+  background-color: var(--main-bg-color);
+  margin: 0px 10vw;
   padding: 0px;
 }
 
@@ -183,24 +187,27 @@ ul {
 }
 
 li {
-  background-color: rgb(146, 145, 145);
+  background-color: rgb(245, 245, 242);
   margin-left: 15px;
   margin-right: 15px;
 }
 
-h3 {
+h2 {
   text-align: left;
   margin: 0px;
   padding-left: 30px;
   padding-top: 30px;
-
-
 }
 
 .resultItem {
   text-align: left;
   padding-left: 50px;
+}
+
+.link {
   cursor: pointer;
+  color: var(--link-color);
+  text-decoration: underline;
 }
 
 li:nth-child(even) {
