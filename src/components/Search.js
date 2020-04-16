@@ -167,47 +167,39 @@ const Search = () => {
     setResults({});
   };
 
-<<<<<<< HEAD
-=======
-
-  const showPrevLink = 1 < currentPageNo;
-  const showNextLink = totalPages > currentPageNo;
-
->>>>>>> master
   return (
     <div className='container'>
       {/*	Heading*/}
       <div className={`header${search ? '-up' : '-down'}`}>
         <div className={`header-left${search ? '-up' : '-down'}`}>
-          <img className='menu' src={Menu} alt='menu' onClick={handleMenu}/>
+          <img className='menu' src={Menu} alt='menu' onClick={handleMenu} />
         </div>
         <div className={`header-middle${search ? '-up' : '-down'}`}>
           <div className={`${search ? 'hide' : 'logo-text'}`}>
-            <img className='logo'src={Logo} alt='Logo'></img>
+            <img className='logo' src={Logo} alt='Logo'></img>
             <p className='text'>Reel in the movies</p>
           </div>
           {/* Search Input*/}
-            <div className='search-bar'>
-              <label className='search-label' htmlFor='search-input'>
-                <input
-                  type='text'
-                  name='query'
-                  id={`search-input${search ? '-up' : '-down'}`}
-                  onKeyDown={handleOnInputChange}
-                />
-                {/*TODO: Button search-function*/}
-                <button id={`search-button${search ? '-up' : '-down'}`}>
-                  <i className='fa fa-search'></i>
-                </button>
-              </label>
-            </div>
+          <div className='search-bar'>
+            <label className='search-label' htmlFor='search-input'>
+              <input
+                type='text'
+                name='query'
+                id={`search-input${search ? '-up' : '-down'}`}
+                onKeyDown={handleOnInputChange}
+              />
+              {/*TODO: Button search-function*/}
+              <button id={`search-button${search ? '-up' : '-down'}`}>
+                <i className='fa fa-search'></i>
+              </button>
+            </label>
           </div>
+        </div>
 
         <div className={`header-right${search ? '-up' : '-down'}`}>
           <button className='register'>Register</button>
           <button className='login'>Log in</button>
         </div>
-
       </div>
 
       {/*	Error Message*/}
