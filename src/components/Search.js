@@ -137,7 +137,8 @@ const Search = () => {
           }
         });
     } else {
-      //TÄHÄN /names/id:stä hakeminen
+      //TODO: /names/id:stä hakeminen
+
       console.log("Choosing a name doesn't work yet, choose a title instead");
     }
   };
@@ -157,39 +158,56 @@ const Search = () => {
 
   /**
    * event handler for clicking on menu
+
+   * TODO: correct functionality
+
    */
   const handleMenu = () => {
     setSearch(false);
     setResults({});
   };
 
+<<<<<<< HEAD
+=======
+
+  const showPrevLink = 1 < currentPageNo;
+  const showNextLink = totalPages > currentPageNo;
+
+>>>>>>> master
   return (
     <div className='container'>
-      <div className='palkki' />
-      <div className='header'>
-        <img className='menu' src={Menu} alt='menu' onClick={handleMenu}></img>
-        <div className={`content ${search ? 'ylos' : 'alas'}`}>
-          {/*	Heading*/}
-          <div>
-            <img
-              className={`logo ${search ? 'hide' : 'show'}`}
-              src={Logo}
-              alt='Logo'
-            ></img>
+      {/*	Heading*/}
+      <div className={`header${search ? '-up' : '-down'}`}>
+        <div className={`header-left${search ? '-up' : '-down'}`}>
+          <img className='menu' src={Menu} alt='menu' onClick={handleMenu}/>
+        </div>
+        <div className={`header-middle${search ? '-up' : '-down'}`}>
+          <div className={`${search ? 'hide' : 'logo-text'}`}>
+            <img className='logo'src={Logo} alt='Logo'></img>
+            <p className='text'>Reel in the movies</p>
           </div>
           {/* Search Input*/}
-          <label className='search-label' htmlFor='search-input'>
-            <input
-              type='text'
-              name='query'
-              id={`search-input${search ? '-up' : '-down'}`}
-              placeholder='Search...'
-              onKeyDown={handleOnInputChange}
-            />
-            <i className='fa fa-search search-icon' aria-hidden='true' />
-          </label>
+            <div className='search-bar'>
+              <label className='search-label' htmlFor='search-input'>
+                <input
+                  type='text'
+                  name='query'
+                  id={`search-input${search ? '-up' : '-down'}`}
+                  onKeyDown={handleOnInputChange}
+                />
+                {/*TODO: Button search-function*/}
+                <button id={`search-button${search ? '-up' : '-down'}`}>
+                  <i className='fa fa-search'></i>
+                </button>
+              </label>
+            </div>
+          </div>
+
+        <div className={`header-right${search ? '-up' : '-down'}`}>
+          <button className='register'>Register</button>
+          <button className='login'>Log in</button>
         </div>
-        <div className='login'>Log in</div>
+
       </div>
 
       {/*	Error Message*/}
