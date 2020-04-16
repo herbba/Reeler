@@ -10,6 +10,8 @@ import cancelService from '../services/cancel';
 import titleService from '../services/titles';
 import nameService from '../services/names';
 import SearchResult from './SearchResult';
+import Modal from "./Modal"
+import useModal from "./useModal"
 
 import MoviePage from './MoviePage';
 import ActorPage from './ActorPage';
@@ -23,6 +25,8 @@ const Search = () => {
   const [itemType, setItemType] = useState('true');
   const [cancel, setCancel] = useState('');
   const [search, setSearch] = useState(false);
+
+  const {isShowing, toggle, register} = useModal();
 
   /**
    * Fetch the search results and update the state with the result.
@@ -77,6 +81,19 @@ const Search = () => {
       }
     }
   };
+
+  const handleSearch = () => {
+    const query = document.getElementById(`search-input${search ? '-up' : '-down'}`).value;
+      if (!query) {
+        setResults({});
+        setMessage('');
+      } else {
+        setLoading(true);
+        setMessage('');
+        setSearch(true);
+        fetchSearchResults(1, query);
+      }
+  }
 
   /**
    * Fetch results according to the prev or next page requests.
@@ -167,13 +184,28 @@ const Search = () => {
     setResults({});
   };
 
+  /**
+   * handle popup-toggling between register and login
+   * @param {*} event default event when button is clicked
+   */
+  const handleToggle = (event) => {
+    if (event.currentTarget.id === 'register') {
+      toggle(true)
+    }
+    else {
+      toggle(false);
+    }
+  }
+
   return (
     <div className='container'>
       {/*	Heading*/}
       <div className={`header${search ? '-up' : '-down'}`}>
+        {/* Header left */}
         <div className={`header-left${search ? '-up' : '-down'}`}>
-          <img className='menu' src={Menu} alt='menu' onClick={handleMenu} />
+          <img className={`menu${search ? '' : ' hide'}`} src={Menu} alt='menu' onClick={handleMenu} />
         </div>
+        {/* Header middle */}
         <div className={`header-middle${search ? '-up' : '-down'}`}>
           <div className={`${search ? 'hide' : 'logo-text'}`}>
             <img className='logo' src={Logo} alt='Logo'></img>
@@ -189,18 +221,22 @@ const Search = () => {
                 onKeyDown={handleOnInputChange}
               />
               {/*TODO: Button search-function*/}
-              <button id={`search-button${search ? '-up' : '-down'}`}>
+              <button id={`search-button${search ? '-up' : '-down'}`}
+              onClick={handleSearch}>
                 <i className='fa fa-search'></i>
               </button>
             </label>
           </div>
         </div>
-
+        {/* Header right */}
         <div className={`header-right${search ? '-up' : '-down'}`}>
-          <button className='register'>Register</button>
-          <button className='login'>Log in</button>
+          <button id='register' onClick={handleToggle}>Register</button>
+          <button id='login' onClick={handleToggle}>Log in</button>
         </div>
       </div>
+
+      {/*Pop-up*/}
+      <Modal isShowing={isShowing}  hide={toggle} register={register}/>
 
       {/*	Error Message*/}
       {message && <p className='message'>{message}</p>}
