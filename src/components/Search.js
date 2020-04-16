@@ -172,7 +172,7 @@ const Search = () => {
       {/*	Heading*/}
       <div className={`header${search ? '-up' : '-down'}`}>
         <div className={`header-left${search ? '-up' : '-down'}`}>
-          <img className={`menu${search ? '' : ' hide'}`} src={Menu} alt='menu' onClick={handleMenu} />
+          <img className='menu' src={Menu} alt='menu' onClick={handleMenu} />
         </div>
         <div className={`header-middle${search ? '-up' : '-down'}`}>
           <div className={`${search ? 'hide' : 'logo-text'}`}>
