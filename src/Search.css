@@ -1,10 +1,15 @@
+:root {
+  --main-bg-color: rgb(249, 248, 248);
+  --darker-bg-color: rgb(245, 245, 242);
+  --link-color: rgb(197, 78, 63);
+}
+
 html,
 body {
-
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: rgb(226, 226, 226);
+  background-color: var(--main-bg-color);
 }
 
 .search-loading {
@@ -94,8 +99,8 @@ body {
 }
 
 .results {
-  background-color: white;
-  margin: 0px 15vw 0px 15vw;
+  background-color: var(--main-bg-color);
+  margin: 0px 10vw;
   padding: 0px;
 }
 
@@ -107,34 +112,39 @@ ul {
 }
 
 li {
-  background-color: rgb(146, 145, 145);
+  background-color: rgb(245, 245, 242);
   margin-left: 15px;
   margin-right: 15px;
 }
 
-h3 {
+h2 {
   text-align: left;
   margin: 0px;
   padding-left: 30px;
   padding-top: 30px;
+  font-weight: lighter;
 }
 
 .resultItem {
   text-align: left;
   padding-left: 50px;
+}
+
+.link {
   cursor: pointer;
+  color: var(--link-color);
+  text-decoration: underline;
 }
 
 li:nth-child(even) {
-  background-color: rgb(218, 218, 218);
-
+  background-color: var(--main-bg-color);
 }
 
 p {
-	text-align: left;
-	padding-left: 50px;
+  text-align: left;
+  padding-left: 50px;
 }
 
 li:nth-child(2) {
-	background-color: rgb(218, 218, 218);
+  background-color: var(--main-bg-color);
 }

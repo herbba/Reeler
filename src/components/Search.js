@@ -19,26 +19,10 @@ const Search = () => {
   const [results, setResults] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [totalResults, setTotalResults] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [currentPageNo, setCurrentPageNo] = useState(0);
   const [item, setItem] = useState(null);
   const [itemType, setItemType] = useState('true');
   const [cancel, setCancel] = useState('');
   const [search, setSearch] = useState(false);
-
-  /**
-   * Get the Total Pages count.
-   *
-   * @param total
-   * @param denominator Count of results per page
-   * @return {number}
-   */
-  const getPageCount = (total, denominator) => {
-    const divisible = 0 === total % denominator;
-    const valueToBeAdded = divisible ? 0 : 1;
-    return Math.floor(total / denominator) + valueToBeAdded;
-  };
 
   /**
    * Fetch the search results and update the state with the result.
@@ -56,21 +40,15 @@ const Search = () => {
     }
 
     setCancel(cancelService.cancelToken);
-    console.log('searchService');
+
     searchService
       .getResults(query)
       .then((res) => {
-        console.log('res', res);
-        const total = 1;
-        const totalPagesCount = getPageCount(total, 20);
         const resultNotFoundMsg = !res.results.length
           ? 'ei oo mitään muuta'
           : '';
         setResults(res.results);
         setMessage(resultNotFoundMsg);
-        setTotalResults(total);
-        setTotalPages(totalPagesCount);
-        setCurrentPageNo(updatedPageNo);
         setLoading(false);
       })
       .catch((error) => {
@@ -85,14 +63,12 @@ const Search = () => {
    * When enter is pressed search results will be fetched
    */
   const handleOnInputChange = (event) => {
-    if (event.key === 'Enter') {
+    if (event.keyCode === '13' || event.key === 'Enter') {
       const query = event.target.value;
 
       if (!query) {
         setResults({});
         setMessage('');
-        setTotalPages(0);
-        setTotalResults(0);
       } else {
         setLoading(true);
         setMessage('');
@@ -109,15 +85,10 @@ const Search = () => {
    */
   const handlePageClick = (type) => {
     //event.preventDefault();
-    const updatePageNo =
-      'prev' === type
-        ? setCurrentPageNo(currentPageNo - 1)
-        : setCurrentPageNo(currentPageNo + 1);
-
     if (!loading) {
       setLoading(true);
       setMessage('');
-      fetchSearchResults(updatePageNo, query);
+      fetchSearchResults(query);
     }
   };
 
@@ -126,7 +97,6 @@ const Search = () => {
    *
    */
   const showItem = () => {
-    console.log('item', item);
     if (itemType === 'movie' || 'short' || 'tvseries') {
       console.log('movie');
       return (
@@ -176,30 +146,13 @@ const Search = () => {
    * Displays search results on the page
    */
   const showSearchResults = () => {
-    console.log('showSearchResults begin');
-    console.log('results', results);
     if (Object.keys(results).length && results.length) {
       return (
         <>
-          <PageNavigation
-            loading={loading}
-            showPrevLink={showPrevLink}
-            showNextLink={showNextLink}
-            handlePrevClick={() => handlePageClick('prev')}
-            handleNextClick={() => handlePageClick('next')}
-          />
           <SearchResult results={results} onItemClick={itemUpdate} />;
-          <PageNavigation
-            loading={loading}
-            showPrevLink={showPrevLink}
-            showNextLink={showNextLink}
-            handlePrevClick={() => handlePageClick('prev')}
-            handleNextClick={() => handlePageClick('next')}
-          />
         </>
       );
     }
-    console.log('showSearchResults end');
   };
 
   /**
@@ -209,9 +162,6 @@ const Search = () => {
     setSearch(false);
     setResults({});
   };
-
-  const showPrevLink = 1 < currentPageNo;
-  const showNextLink = totalPages > currentPageNo;
 
   return (
     <div className='container'>
