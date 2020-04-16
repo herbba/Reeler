@@ -20,7 +20,7 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [item, setItem] = useState(null);
-  const [itemType, setItemType] = useState('true');
+  const [itemType, setItemType] = useState('');
   const [cancel, setCancel] = useState('');
   const [search, setSearch] = useState(false);
 
@@ -79,25 +79,13 @@ const Search = () => {
   };
 
   /**
-   * Fetch results according to the prev or next page requests.
-   *
-   * @param {String} type 'prev' or 'next'
-   */
-  const handlePageClick = (type) => {
-    //event.preventDefault();
-    if (!loading) {
-      setLoading(true);
-      setMessage('');
-      fetchSearchResults(query);
-    }
-  };
-
-  /**
    * shows current item's information
    *
    */
   const showItem = () => {
-    if (itemType === 'movie' || 'short' || 'tvseries') {
+    console.log('itemtype', itemType);
+    console.log('item', item);
+    if (item.nconst.charAt(0) === 'm') {
       console.log('movie');
       return (
         <>
@@ -106,7 +94,12 @@ const Search = () => {
         </>
       );
     } else {
-      return <ActorPage actor={item} />;
+      return (
+        <>
+          <button onClick={() => setItem(null)}>back</button>
+          <ActorPage act={item} onItemClick={itemUpdate} />
+        </>
+      );
     }
   };
 
@@ -121,6 +114,7 @@ const Search = () => {
    */
   const itemUpdate = (itemId, e) => {
     e.preventDefault();
+    console.log('itemid', itemId);
     if (itemId.charAt(0) === 't') {
       titleService
         .getTitle(itemId)
@@ -137,9 +131,22 @@ const Search = () => {
           }
         });
     } else {
-      //TODO: /names/id:stä hakeminen
-
-      console.log("Choosing a name doesn't work yet, choose a title instead");
+      console.log('nameservice');
+      nameService
+        .getName(itemId)
+        .then((res) => {
+          console.log('resoinse', res);
+          setItem(res);
+          setItemType('actor');
+          setLoading(false);
+        })
+        .catch((error) => {
+          if (cancelService.isCancel(error) || error) {
+            setLoading(false);
+            setMessage('EI LÖYTYNY DATAA itemupdate');
+            console.log('itemupdaterror', error);
+          }
+        });
     }
   };
 
