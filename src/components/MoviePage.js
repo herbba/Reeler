@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import titleService from '../services/titles';
 
-const MoviePage = ({ mov }) => {
+const MoviePage = (props) => {
+  const [movieId, setMovieId] = useState(props.match.params.id);
+  const [movie, setMovie] = useState({});
+
+  useEffect(() => {
+    titleService.getTitle(movieId).then((res) => setMovie(res));
+  }, []);
+
   const runTimeToHours = () => {
-    const runtime = mov.runtimeminutes;
+    const runtime = movie.runtimeminutes;
     const hours = runtime / 60;
     const rhours = Math.floor(hours);
     const minutes = (hours - rhours) * 60;
@@ -21,18 +29,18 @@ const MoviePage = ({ mov }) => {
   return (
     <div className='movieContainer'>
       <div className='movieHeader'>
-        <p className='paddedText'>{mov.titletype}</p>
-        <h1 className='paddedText'>{mov.primarytitle}</h1>
-        {mov.endyear ? (
+        <p className='paddedText'>{movie.titletype}</p>
+        <h1 className='paddedText'>{movie.primarytitle}</h1>
+        {movie.endyear ? (
           <h2 className='paddedText'>
-            {mov.startyear} - {mov.endyear}
+            {movie.startyear} - {movie.endyear}
           </h2>
         ) : (
-          <h3 className='paddedText'>{mov.startyear}</h3>
+          <h3 className='paddedText'>{movie.startyear}</h3>
         )}
         <div className='movieInfo'>
           {runTimeToHours()}
-          {mov.genres.join(', ')}
+          {/*movie.genres.join(', ')*/}
         </div>
       </div>
     </div>

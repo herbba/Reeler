@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom/';
+
 import '../Search.css';
 
 const SearchResult = ({ results, onItemClick }) => {
@@ -17,19 +19,19 @@ const SearchResult = ({ results, onItemClick }) => {
   };
 
   //kutsu näin: <ul>{mapActorResults()}</ul>
-  const mapResults = (data, visible) =>
-    data.slice(0, visible).map((res) => (
-      <li key={res}>
-        <p className='resultItem link' onClick={(e) => onItemClick(res, e)}>
-          {res}
-        </p>
+  const mapResults = (data, visible, baseUrl) =>
+    data.slice(0, visible).map((resId) => (
+      <li key={resId}>
+        <Link to={`${baseUrl}${resId}`}>
+          <p className='resultItem link'>{resId}</p>
+        </Link>
       </li>
     ));
 
-  const resultDiv = (type, data, visibility) => (
+  const resultDiv = (type, data, visibility, baseUrl) => (
     <div>
       <h2 className='paddedText'>{type}</h2>
-      <ul>{mapResults(data, visibility)}</ul>
+      <ul>{mapResults(data, visibility, baseUrl)}</ul>
       {data && data.length > visibility ? (
         <p
           className='resultItem link'
@@ -45,8 +47,8 @@ const SearchResult = ({ results, onItemClick }) => {
 
   return (
     <div className='results'>
-      {resultDiv('Movies', movies, mVisible)}
-      {resultDiv('Actors', actors, aVisible)}
+      {resultDiv('Movies', movies, mVisible, '/titles/')}
+      {resultDiv('Actors', actors, aVisible, '/names/')}
     </div>
   );
 };

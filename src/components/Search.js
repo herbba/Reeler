@@ -19,8 +19,8 @@ const Search = () => {
   const [results, setResults] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [item, setItem] = useState(null);
-  const [itemType, setItemType] = useState('');
+  //const [item, setItem] = useState(null);
+  //const [itemType, setItemType] = useState('');
   const [cancel, setCancel] = useState('');
   const [search, setSearch] = useState(false);
 
@@ -82,7 +82,9 @@ const Search = () => {
    * shows current item's information
    *
    */
+  /*
   const showItem = () => {
+    
     console.log('itemtype', itemType);
     console.log('item', item);
     if (item.nconst.charAt(0) === 'm') {
@@ -101,8 +103,9 @@ const Search = () => {
         </>
       );
     }
+    
   };
-
+*/
   /**
    * Eventhandler for clicking search results
    * Gets a movie element and sets it to item and updates isMovie
@@ -112,7 +115,7 @@ const Search = () => {
    * @param {event} e default event when item is clicked
    *
    */
-  const itemUpdate = (itemId, e) => {
+  /* const itemUpdate = (itemId, e) => {
     e.preventDefault();
     console.log('itemid', itemId);
     if (itemId.charAt(0) === 't') {
@@ -149,7 +152,7 @@ const Search = () => {
         });
     }
   };
-
+*/
   /**
    * Displays search results on the page
    */
@@ -157,7 +160,7 @@ const Search = () => {
     if (Object.keys(results).length && results.length) {
       return (
         <>
-          <SearchResult results={results} onItemClick={itemUpdate} />;
+          <SearchResult results={results} />;
         </>
       );
     }
@@ -219,7 +222,7 @@ const Search = () => {
         alt='loader'
       />
       {/* Results or MoviePage */}
-      {item === null ? showSearchResults() : showItem()}
+      {showSearchResults()}
     </div>
   );
 };

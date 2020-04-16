@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import nameService from '../services/names';
+import { Link } from 'react-router-dom/';
 
-const ActorPage = ({ act, onItemClick }) => {
+const ActorPage = (props) => {
+  const [actorId, setActorId] = useState(props.match.params.id);
+  const [actor, setActor] = useState({
+    birthyear: null,
+    deathyear: null,
+    knownfortitles: [],
+    nconst: '',
+    primaryname: '',
+    primaryprofession: '',
+  });
+
+  useEffect(() => {
+    nameService.getName(actorId).then((res) => setActor(res));
+  }, []);
+
   const mapFilmo = () => {
-    return act.knownfortitles.map((titleId) => (
+    return actor.knownfortitles.map((titleId) => (
       <li className='filmography' key={titleId}>
-        {titleId}
+        <Link className='filmography' to={`/titles/${titleId}`}>
+          {titleId}
+        </Link>
       </li>
     ));
   };
@@ -12,13 +30,13 @@ const ActorPage = ({ act, onItemClick }) => {
   return (
     <div className='movieContainer'>
       <div className='movieHeader'>
-        <h1 className='paddedText'>{act.primaryname}</h1>
+        <h1 className='paddedText'>{actor.primaryname}</h1>
         <p className='paddedText'>
-          {act.primaryprofession.replace(/,/g, ', ')}
+          {actor.primaryprofession.replace(/,/g, ', ')}
         </p>
         <div className='paddedText'>
-          <p>Born: {act.birthyear ? act.birthyear : 'unknown'}</p>
-          <p>{act.deathyear ? 'Died: ' + act.deathyear : ''}</p>
+          <p>Born: {actor.birthyear ? actor.birthyear : 'unknown'}</p>
+          <p>{actor.deathyear ? 'Died: ' + actor.deathyear : ''}</p>
         </div>
       </div>
       <div>
