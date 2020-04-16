@@ -168,6 +168,7 @@ const Search = () => {
         });
     } else {
       //TODO: /names/id:stä hakeminen
+
       console.log("Choosing a name doesn't work yet, choose a title instead");
     }
   };
@@ -204,12 +205,15 @@ const Search = () => {
 
   /**
    * event handler for clicking on menu
+
    * TODO: correct functionality
+
    */
   const handleMenu = () => {
     setSearch(false);
     setResults({});
   };
+
 
   const showPrevLink = 1 < currentPageNo;
   const showNextLink = totalPages > currentPageNo;
@@ -247,6 +251,7 @@ const Search = () => {
           <button className='register'>Register</button>
           <button className='login'>Log in</button>
         </div>
+
       </div>
 
       {/*	Error Message*/}

@@ -1,5 +1,6 @@
 html,
 body {
+
   height: 100%;
   margin: 0;
   padding: 0;
@@ -9,11 +10,13 @@ body {
   position: absolute;
   left: calc(50vw - 99px);
   top: 20vh;
+
 }
 
 .nav-link-container {
   display: none;
 }
+
 
 .header-up {
   display: flex;
@@ -117,6 +120,7 @@ body {
   padding: 10px 22px;
   border: 2px solid rgb(117, 117, 117);
   background-color: rgb(241, 240, 240);
+
   border-radius: 9999em;
   outline: none;
 }
@@ -124,12 +128,15 @@ body {
 #search-input-up {
   min-width: 220px;
   max-width: 500px;
+
   padding: 5px 10px;
   border: 2px solid rgb(117, 117, 117);
   background-color: rgb(241, 240, 240);
+
   border-radius: 9999em;
   outline: none;
 }
+
 
 #search-button-down {
   position: absolute;
@@ -159,6 +166,7 @@ body {
   margin: 4px 18px;
   height: 32px;
   cursor: pointer;
+
 }
 
 .results {
@@ -185,6 +193,8 @@ h3 {
   margin: 0px;
   padding-left: 30px;
   padding-top: 30px;
+
+
 }
 
 .resultItem {
