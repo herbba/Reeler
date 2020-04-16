@@ -74,8 +74,8 @@ body {
   justify-content: center;
 }
 
-.login,
-.register {
+#login,
+#register {
   white-space: nowrap;
   height: 24px;
   padding: 0px 25px;
@@ -87,20 +87,24 @@ body {
   cursor: pointer;
 }
 
-.login:hover,
-.register:hover {
+#login:hover,
+#register:hover,
+#modal-login:hover,
+#modal-register:hover {
   background-color: #bb2604;
 }
 
-.login:active,
-.register:active {
+#login:active,
+#register:active,
+#modal-login:active,
+#modal-register:active {
   position: relative;
   top: 1px;
 }
 
 .logo {
   margin: 0;
-  padding-left: 5%;
+  padding-left: 10%;
   min-width: 15%;
   max-width: 40%;
 }
@@ -110,10 +114,6 @@ body {
   font-size: calc(10px + 1.5vw);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: #cd0001;
-}
-
-.hide {
-  display: none;
 }
 
 .search-bar {
@@ -235,4 +235,119 @@ li:nth-child(even) {
   text-align: left;
   margin: 0px;
   padding: 30px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0.9;
+}
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.modal {
+  z-index: 100;
+  background: lightgray;
+  position: relative;
+  margin: 1.75rem auto;
+  border-radius: 25px;
+  width: 350px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: center;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-weight: 1000;
+  line-height: 1;
+  opacity: 0.8;
+  cursor: pointer;
+  border: 2px solid #f65900;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  background-color: lightgray;
+  padding: 2px;
+}
+
+.modal-span {
+  color: #f65900;
+  width: 25px;
+  font-size: 25px;
+  margin-top: -3px;
+  padding-bottom: 1px;
+}
+
+.modal-logo {
+  width: 50%;
+  padding-left: 15%;
+}
+
+.modal-confirm,
+.modal-email,
+.modal-password {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  font-family: Verdana;
+  font-size: 14px;
+}
+
+.modal-button {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+#modal-login,
+#modal-register {
+  align-self: center;
+  white-space: nowrap;
+  height: 24px;
+  padding: 0px 25px;
+  font-size: 12px;
+  border: 1px solid rgb(187, 94, 60);
+  border-radius: 28px;
+  background-color: #f65900;
+  cursor: pointer;
+}
+
+#confirm-input,
+#email-input,
+#password-input {
+  max-width: 500px;
+  width: 90%;
+  padding: 3px 10px;
+  margin-top: 10px;
+  border: 2px solid rgb(241, 240, 240);
+  background-color: rgb(241, 240, 240);
+  border-radius: 9999em;
+  outline: none;
+}
+
+.hide {
+  display: none;
 }

@@ -7,12 +7,8 @@ import '../Search.css';
 const SearchResult = ({ results, onItemClick }) => {
   const [mVisible, setMVisible] = useState(4);
   const [aVisible, setAVisible] = useState(4);
-  const [movies, setMovies] = useState(
-    results.filter((result) => result.charAt(0) === 't')
-  );
-  const [actors, setActors] = useState(
-    results.filter((result) => result.charAt(0) === 'n')
-  );
+  const movies = results.filter((result) => result.charAt(0) === 't');
+  const actors = results.filter((result) => result.charAt(0) === 'n');
 
   const loadMore = (type) => {
     type === 'm' ? setMVisible(mVisible + 4) : setAVisible(aVisible + 4);

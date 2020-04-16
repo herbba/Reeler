@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import titleService from '../services/titles';
 
 const MoviePage = (props) => {
-  const [movieId, setMovieId] = useState(props.match.params.id);
+  const movieId = props.match.params.id;
   const [movie, setMovie] = useState({});
 
   useEffect(() => {
     titleService.getTitle(movieId).then((res) => setMovie(res));
-  }, []);
+  }, [movieId]);
 
   const runTimeToHours = () => {
     const runtime = movie.runtimeminutes;
