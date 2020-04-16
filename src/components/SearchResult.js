@@ -28,7 +28,7 @@ const SearchResult = ({ results, onItemClick }) => {
 
   const resultDiv = (type, data, visibility) => (
     <div>
-      <h2>{type}</h2>
+      <h2 className='paddedText'>{type}</h2>
       <ul>{mapResults(data, visibility)}</ul>
       {data && data.length > visibility ? (
         <p
