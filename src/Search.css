@@ -302,6 +302,7 @@ li:nth-child(even) {
 }
 
 .modal-logo {
+  height: 100%;
   width: 50%;
   padding-left: 15%;
 }
