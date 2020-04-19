@@ -1,24 +1,36 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Search.css';
 import Loader from '../loader.gif';
 import Logo from '../images/logo.png';
 import Menu from '../images/menu.png';
-import searchService from '../services/searchResults';
-import cancelService from '../services/cancel';
-import SearchResult from './SearchResult';
 import Modal from './Modal';
 import useModal from './useModal';
+import history from '../history';
+import { Link, Redirect } from 'react-router-dom';
+import cancelService from '../services/cancel';
+import searchService from '../services/searchResults';
 
-const Search = () => {
-  //const [query, setQuery] = useState('');
+const Search = (props) => {
   const [results, setResults] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [search, setSearch] = useState(history.location.search ? true : false);
   const [cancel, setCancel] = useState('');
-  const [search, setSearch] = useState(false);
-
+  const [query, setQuery] = useState('');
+  const [enter, setEnter] = useState(false);
   const { isShowing, toggle, register } = useModal();
+
+  useEffect(() => {
+    setSearch(
+      history.location.search ||
+        history.location.pathname.includes('titles') ||
+        history.location.pathname.includes('titles')
+        ? true
+        : false
+    );
+    setEnter(false);
+  }, []);
   /**
    * Fetch the search results and update the state with the result.
    * Also cancels the previous query before making the new one.
@@ -59,32 +71,10 @@ const Search = () => {
    */
   const handleOnInputChange = (event) => {
     if (event.keyCode === '13' || event.key === 'Enter') {
-      const query = event.target.value;
-
-      if (!query) {
-        setResults({});
-        setMessage('');
-      } else {
-        setLoading(true);
-        setMessage('');
+      if (query) {
         setSearch(true);
-        fetchSearchResults(1, query);
+        setEnter(true);
       }
-    }
-  };
-
-  const handleSearch = () => {
-    const query = document.getElementById(
-      `search-input${search ? '-up' : '-down'}`
-    ).value;
-    if (!query) {
-      setResults({});
-      setMessage('');
-    } else {
-      setLoading(true);
-      setMessage('');
-      setSearch(true);
-      fetchSearchResults(1, query);
     }
   };
 
@@ -101,19 +91,6 @@ const Search = () => {
   };
 
   /**
-   * Displays search results on the page
-   */
-  const showSearchResults = () => {
-    if (Object.keys(results).length && results.length) {
-      return (
-        <>
-          <SearchResult results={results} />;
-        </>
-      );
-    }
-  };
-
-  /**
    * event handler for clicking on menu
 
    * TODO: correct functionality
@@ -122,6 +99,7 @@ const Search = () => {
   const handleMenu = () => {
     setSearch(false);
     setResults({});
+    setQuery('');
   };
 
   return (
@@ -129,12 +107,14 @@ const Search = () => {
       {/*	Heading*/}
       <div className={`header${search ? '-up' : '-down'}`}>
         <div className={`header-left${search ? '-up' : '-down'}`}>
-          <img
-            className={`menu${search ? '' : ' hide'}`}
-            src={Menu}
-            alt='menu'
-            onClick={handleMenu}
-          />
+          <Link to='/'>
+            <img
+              className={`menu${search ? '' : ' hide'}`}
+              src={Menu}
+              alt='menu'
+              onClick={handleMenu}
+            />
+          </Link>
         </div>
         <div className={`header-middle${search ? '-up' : '-down'}`}>
           <div className={`${search ? 'hide' : 'logo-text'}`}>
@@ -146,17 +126,32 @@ const Search = () => {
             <label className='search-label' htmlFor='search-input'>
               <input
                 type='text'
+                value={query}
                 name='query'
                 id={`search-input${search ? '-up' : '-down'}`}
+                onChange={(event) => {
+                  setEnter(false);
+                  setQuery(event.target.value);
+                  fetchSearchResults(event.target.value);
+                }}
                 onKeyDown={handleOnInputChange}
               />
               {/*TODO: Button search-function*/}
-              <button
-                id={`search-button${search ? '-up' : '-down'}`}
-                onClick={handleSearch}
+              <Link
+                to={{
+                  pathname: `/search?=q${query}`,
+                  state: { results: results },
+                }}
               >
-                <i className='fa fa-search'></i>
-              </button>
+                <button
+                  id={`search-button${search ? '-up' : '-down'}`}
+                  onClick={() => {
+                    setSearch(true);
+                  }}
+                >
+                  <i className='fa fa-search'></i>
+                </button>
+              </Link>
             </label>
           </div>
         </div>
@@ -181,10 +176,17 @@ const Search = () => {
         className={`search-loading ${loading ? 'show' : 'hide'}`}
         alt='loader'
       />
-      {/* Results or MoviePage */}
-      {showSearchResults()}
+      {enter ? (
+        <Redirect
+          to={{
+            pathname: `/search?=q${query}`,
+            state: { results: results },
+          }}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
-
 export default Search;

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import titleService from '../services/titles';
 
+/* TODO */
+/* When using the browser's back-button, url changes but the view doesn't, same in actorPage.js */
+
 const MoviePage = (props) => {
-  const movieId = props.match.params.id;
+  const movieId = props.location.state.itemId;
   const [movie, setMovie] = useState({});
 
   useEffect(() => {
@@ -28,6 +31,9 @@ const MoviePage = (props) => {
 
   return (
     <div className='movieContainer'>
+      {/* <button className='resultItem link' onClick={props.history.goBack()}>
+        Back
+      </button> */}
       <div className='movieHeader'>
         <p className='paddedText'>{movie.titletype}</p>
         <h1 className='paddedText'>{movie.primarytitle}</h1>

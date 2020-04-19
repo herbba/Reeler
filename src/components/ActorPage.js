@@ -1,41 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import nameService from '../services/names';
-import titleService from '../services/titles';
 import { Link } from 'react-router-dom/';
 
+/* TODO */
+/* When using the browser's back-button, url changes but the view doesn't, same in actorPage.js */
+
 const ActorPage = (props) => {
-  const actorId = props.match.params.id;
-  const [actor, setActor] = useState({
-    birthyear: null,
-    deathyear: null,
-    knownfortitles: [],
-    nconst: '',
-    primaryname: '',
-    primaryprofession: '',
-  });
-  const [knownFor, setKnownFor] = useState([]);
+  const actorId = props.location.state.itemId;
+  const [actor, setActor] = useState({});
+  //const [knownFor, setKnownFor] = useState([])
 
   useEffect(() => {
     nameService.getName(actorId).then((res) => setActor(res));
-  }, [actorId, actor.knownfortitles, knownFor]);
+  }, [actorId]);
 
   const mapFilmo = () => {
-    return actor.knownfortitles.map((titleId) => (
-      <li className='filmography' key={titleId}>
-        <Link className='filmography' to={`/titles/${titleId}`}>
-          {titleId}
-        </Link>
-      </li>
-    ));
+    return actor.knownfortitles
+      ? actor.knownfortitles.map((titleId) => (
+          <li className='filmography' key={titleId}>
+            <Link
+              className='filmography'
+              to={{
+                pathname: `/titles/${titleId}`,
+                state: { itemId: titleId },
+              }}
+            >
+              {titleId}
+            </Link>
+          </li>
+        ))
+      : '';
+  };
+
+  const styleProfession = () => {
+    return actor.primaryprofession
+      ? actor.primaryprofession.replace(/,/g, ', ')
+      : '';
   };
 
   return (
     <div className='movieContainer'>
       <div className='movieHeader'>
         <h1 className='paddedText'>{actor.primaryname}</h1>
-        <p className='paddedText'>
-          {actor.primaryprofession.replace(/,/g, ', ')}
-        </p>
+        <p className='paddedText'>{styleProfession()}</p>
         <div className='paddedText'>
           <p>Born: {actor.birthyear ? actor.birthyear : 'unknown'}</p>
           <p>{actor.deathyear ? 'Died: ' + actor.deathyear : ''}</p>
