@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import titleService from '../services/titles';
 import history from '../history';
-/* TODO */
-/* When using the browser's back-button, url changes but the view doesn't, same in actorPage.js */
 
 const MoviePage = (props) => {
   const movieId = props.location.state.itemId;
   const [movie, setMovie] = useState({});
 
+  /* when movieId changes, gets movie's data */
   useEffect(() => {
     titleService.getTitle(movieId).then((res) => setMovie(res));
   }, [movieId]);
 
+  /* calculates minutes to hours and minutes. Doesn't show ex. 0h 10min or 2h 0min*/
   const runTimeToHours = () => {
     const runtime = movie.runtimeminutes;
     const hours = runtime / 60;
@@ -31,6 +31,7 @@ const MoviePage = (props) => {
 
   return (
     <div className='movieContainer'>
+      {/*On click goes back to the previous page*/}
       <p className='resultItem link' onClick={() => history.goBack()}>
         Back
       </p>
@@ -46,7 +47,7 @@ const MoviePage = (props) => {
         )}
         <div className='movieInfo'>
           {runTimeToHours()}
-          {/*movie.genres.join(', ')*/}
+          {movie.genres ? movie.genres.join(', ') : ''}
         </div>
       </div>
     </div>

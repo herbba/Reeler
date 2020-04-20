@@ -25,6 +25,10 @@ const Search = (props) => {
   const [enter, setEnter] = useState(true);
   const { isShowing, toggle, register } = useModal();
 
+  /**
+   * on component mount, if url has search, title or name in it,
+   * show the search bar on top
+   */
   useEffect(() => {
     setSearch(
       history.location.pathname.includes('search') ||
@@ -71,7 +75,9 @@ const Search = (props) => {
   };
 
   /**
-   * When enter is pressed search results will be fetched
+   * When enter is pressed search bar to the top and
+   * enter sets to true
+   * @param {*} event default event on input change
    */
   const handleOnInputChange = (event) => {
     if (event.keyCode === '13' || event.key === 'Enter') {
@@ -96,9 +102,7 @@ const Search = (props) => {
 
   /**
    * event handler for clicking on menu
-
    * TODO: correct functionality
-
    */
   const handleMenu = () => {
     setSearch(false);
@@ -140,7 +144,7 @@ const Search = (props) => {
                 }}
                 onKeyDown={handleOnInputChange}
               />
-              {/*TODO: Button search-function*/}
+              {/*On button click switch router*/}
               <Link
                 to={{
                   pathname: `/search?q=${query}`,
@@ -179,6 +183,7 @@ const Search = (props) => {
         className={`search-loading ${loading ? 'show' : 'hide'}`}
         alt='loader'
       />
+      {/* if enter is pressed and there is results, switch router */}
       {enter && results.length ? (
         <Redirect
           to={{

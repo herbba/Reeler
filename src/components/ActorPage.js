@@ -3,21 +3,21 @@ import nameService from '../services/names';
 import { Link } from 'react-router-dom/';
 import history from '../history';
 
-/* TODO */
-/* When using the browser's back-button, url changes but the view doesn't, same in actorPage.js */
-
 const ActorPage = (props) => {
   const actorId = props.location.state.itemId;
   const [actor, setActor] = useState({});
 
+  /* when actorIDd changes, gets actor's data */
   useEffect(() => {
     nameService.getName(actorId).then((res) => setActor(res));
   }, [actorId]);
 
+  /* if actor has known titles, lists the links to them */
   const mapFilmo = () => {
     return actor.knownfortitles
       ? actor.knownfortitles.map((titleId) => (
           <li className='filmography' key={titleId}>
+            {/* If link clicked, switch routes */}
             <Link
               className='filmography'
               to={{
@@ -32,6 +32,7 @@ const ActorPage = (props) => {
       : '';
   };
 
+  /* if actor has professions, adds spaces bewteen the commas */
   const styleProfession = () => {
     return actor.primaryprofession
       ? actor.primaryprofession.replace(/,/g, ', ')
@@ -40,6 +41,7 @@ const ActorPage = (props) => {
 
   return (
     <div className='movieContainer'>
+      {/*On click goes back to the previous page*/}
       <p className='resultItem link' onClick={() => history.goBack()}>
         Back
       </p>

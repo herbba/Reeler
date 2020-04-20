@@ -7,28 +7,27 @@ import '../Search.css';
 const SearchResult = (props) => {
   const [mVisible, setMVisible] = useState(4);
   const [aVisible, setAVisible] = useState(4);
-  const movies = props.location.state.results.filter((item) =>
-    item.includes('tt')
-  );
-  const actors = props.location.state.results.filter((item) =>
-    item.includes('nm')
-  );
+  const movies = props.location.state.results
+    ? props.location.state.results.filter((item) => item.includes('tt'))
+    : {};
+  const actors = props.location.state.results
+    ? props.location.state.results.filter((item) => item.includes('nm'))
+    : {};
 
   const loadMore = (type) => {
     type === 'tt' ? setMVisible(mVisible + 4) : setAVisible(aVisible + 4);
   };
 
-  //kutsu näin: <ul>{mapActorResults()}</ul>
+  /* Shows the right amount (visible) of results as a list of links */
   const mapResults = (data, visible, baseUrl) =>
     data.slice(0, visible).map((resId) => (
       <li key={resId}>
+        {/* When link clicked, switches routes */}
         <Link
           to={{
             pathname: `${baseUrl}${resId}`,
             state: {
               itemId: resId,
-              results: props.location.state.results,
-              pathname: props.location.pathname,
             },
           }}
         >
@@ -37,6 +36,7 @@ const SearchResult = (props) => {
       </li>
     ));
 
+  /* Shows the right results according to the result id */
   const resultDiv = (type, data, visibility, baseUrl) => (
     <div>
       <h2 className='paddedText'>{type === 'tt' ? 'Movies' : 'Actors'}</h2>
