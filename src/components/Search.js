@@ -17,20 +17,24 @@ const Search = (props) => {
   const [message, setMessage] = useState('');
   const [search, setSearch] = useState(history.location.search ? true : false);
   const [cancel, setCancel] = useState('');
-  const [query, setQuery] = useState('');
-  const [enter, setEnter] = useState(false);
+  const [query, setQuery] = useState(
+    history.location.search
+      ? decodeURI(history.location.search.substring(3))
+      : ''
+  );
+  const [enter, setEnter] = useState(true);
   const { isShowing, toggle, register } = useModal();
 
   useEffect(() => {
     setSearch(
-      history.location.search ||
+      history.location.pathname.includes('search') ||
         history.location.pathname.includes('titles') ||
-        history.location.pathname.includes('titles')
+        history.location.pathname.includes('names')
         ? true
         : false
     );
-    setEnter(false);
   }, []);
+
   /**
    * Fetch the search results and update the state with the result.
    * Also cancels the previous query before making the new one.
@@ -139,7 +143,7 @@ const Search = (props) => {
               {/*TODO: Button search-function*/}
               <Link
                 to={{
-                  pathname: `/search?=q${query}`,
+                  pathname: `/search?q=${query}`,
                   state: { results: results },
                 }}
               >
@@ -165,7 +169,6 @@ const Search = (props) => {
           </button>
         </div>
       </div>
-
       {/*Pop-up*/}
       <Modal isShowing={isShowing} hide={toggle} register={register} />
       {/*	Error Message*/}
@@ -176,10 +179,10 @@ const Search = (props) => {
         className={`search-loading ${loading ? 'show' : 'hide'}`}
         alt='loader'
       />
-      {enter ? (
+      {enter && results.length ? (
         <Redirect
           to={{
-            pathname: `/search?=q${query}`,
+            pathname: `/search?q=${query}`,
             state: { results: results },
           }}
         />

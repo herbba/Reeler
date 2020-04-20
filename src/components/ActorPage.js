@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import nameService from '../services/names';
 import { Link } from 'react-router-dom/';
+import history from '../history';
 
 /* TODO */
 /* When using the browser's back-button, url changes but the view doesn't, same in actorPage.js */
@@ -8,7 +9,6 @@ import { Link } from 'react-router-dom/';
 const ActorPage = (props) => {
   const actorId = props.location.state.itemId;
   const [actor, setActor] = useState({});
-  //const [knownFor, setKnownFor] = useState([])
 
   useEffect(() => {
     nameService.getName(actorId).then((res) => setActor(res));
@@ -40,6 +40,10 @@ const ActorPage = (props) => {
 
   return (
     <div className='movieContainer'>
+      <p className='resultItem link' onClick={() => history.goBack()}>
+        Back
+      </p>
+
       <div className='movieHeader'>
         <h1 className='paddedText'>{actor.primaryname}</h1>
         <p className='paddedText'>{styleProfession()}</p>

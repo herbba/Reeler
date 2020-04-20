@@ -11,7 +11,8 @@ const App = () => {
     <Router history={history}>
       <Search />
       <Switch>
-        <Route exact path='/search?=q:query' component={SearchResult} />
+        <Route exact path='/search' component={SearchResult} />
+        <Route exact path='/search?q=:query' component={SearchResult} />
         <Route exact path='/titles/:id' component={MoviePage} />
         <Route exact path='/names/:id' component={ActorPage} />
       </Switch>

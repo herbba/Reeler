@@ -25,7 +25,11 @@ const SearchResult = (props) => {
         <Link
           to={{
             pathname: `${baseUrl}${resId}`,
-            state: { itemId: resId },
+            state: {
+              itemId: resId,
+              results: props.location.state.results,
+              pathname: props.location.pathname,
+            },
           }}
         >
           <p className='resultItem link'>{resId}</p>
