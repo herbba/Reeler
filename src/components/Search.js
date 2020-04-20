@@ -39,7 +39,7 @@ const Search = (props) => {
     );
   }, []);
 
-  const { isShowing, toggle, register } = useModal();
+  useEffect(() => {}, [query]);
 
   /**
    * Fetch the search results and update the state with the result.
@@ -49,7 +49,7 @@ const Search = (props) => {
    * @param {String} query Search Query.
    *
    */
-  const fetchSearchResults = (updatedPageNo = '', query) => {
+  const fetchSearchResults = (q) => {
     //const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
 
     if (cancel) {
@@ -59,7 +59,7 @@ const Search = (props) => {
     setCancel(cancelService.cancelToken);
 
     searchService
-      .getResults(query)
+      .getResults(q)
       .then((res) => {
         const resultNotFoundMsg = !res.results.length
           ? 'ei oo mitään muuta'
@@ -125,18 +125,6 @@ const Search = (props) => {
     setSearch(false);
     setResults({});
     setQuery('');
-  };
-
-  /**
-   * handle popup-toggling between register and login
-   * @param {*} event default event when button is clicked
-   */
-  const handleToggle = (event) => {
-    if (event.currentTarget.id === 'register') {
-      toggle(true);
-    } else {
-      toggle(false);
-    }
   };
 
   return (
