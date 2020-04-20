@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom/';
 import '../Search.css';
 import '../Search.css';
@@ -17,6 +17,12 @@ const SearchResult = (props) => {
   const loadMore = (type) => {
     type === 'tt' ? setMVisible(mVisible + 4) : setAVisible(aVisible + 4);
   };
+
+  useEffect(() => {
+    console.log('movies', movies);
+    console.log('actors', actors);
+    console.log('props', props.location.state.results);
+  });
 
   /* Shows the right amount (visible) of results as a list of links */
   const mapResults = (data, visible, baseUrl) =>

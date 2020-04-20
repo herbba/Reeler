@@ -67,11 +67,12 @@ const Search = (props) => {
         setResults(res.results);
         setMessage(resultNotFoundMsg);
         setLoading(false);
+        setEnter(true);
       })
       .catch((error) => {
         if (cancelService.isCancel(error) || error) {
           setLoading(false);
-          setMessage('EI LÖYTYNY DATAA fetchSearchResults');
+          setMessage('EI LÖYTYNY DATAA');
         }
       });
   };
@@ -81,27 +82,22 @@ const Search = (props) => {
    * enter sets to true
    * @param {*} event default event on input change
    */
-  const handleOnInputChange = (event) => {
+  const handleOnInputChange = (event, q) => {
     if (event.keyCode === '13' || event.key === 'Enter') {
-      if (query) {
-        setSearch(true);
-        setEnter(true);
-      }
+      handleSearch(q);
     }
   };
 
-  const handleSearch = () => {
-    const query = document.getElementById(
-      `search-input${search ? '-up' : '-down'}`
-    ).value;
-    if (!query) {
-      setResults({});
-      setMessage('');
-    } else {
+  /** Shows loading-indicator
+   * sets the search bar on top
+   * fetches search results
+   * switches router to searchresults */
+  const handleSearch = (q) => {
+    if (q) {
       setLoading(true);
-      setMessage('');
       setSearch(true);
-      fetchSearchResults(1, query);
+      fetchSearchResults(q);
+      setEnter(true);
     }
   };
 
@@ -122,6 +118,8 @@ const Search = (props) => {
    * TODO: correct functionality
    */
   const handleMenu = () => {
+    setLoading(false);
+    setMessage('');
     setSearch(false);
     setResults({});
     setQuery('');
@@ -159,26 +157,19 @@ const Search = (props) => {
                 onChange={(event) => {
                   setEnter(false);
                   setQuery(event.target.value);
-                  fetchSearchResults(event.target.value);
+                  //fetchSearchResults(event.target.value);
                 }}
-                onKeyDown={handleOnInputChange}
+                onKeyDown={(e) => handleOnInputChange(e, query)}
               />
               {/*On button click switch router*/}
-              <Link
-                to={{
-                  pathname: `/search?q=${query}`,
-                  state: { results: results },
+              <button
+                id={`search-button${search ? '-up' : '-down'}`}
+                onClick={() => {
+                  handleSearch(query);
                 }}
               >
-                <button
-                  id={`search-button${search ? '-up' : '-down'}`}
-                  onClick={() => {
-                    setSearch(true);
-                  }}
-                >
-                  <i className='fa fa-search'></i>
-                </button>
-              </Link>
+                <i className='fa fa-search'></i>
+              </button>
             </label>
           </div>
         </div>
