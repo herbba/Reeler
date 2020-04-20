@@ -39,6 +39,8 @@ const Search = (props) => {
     );
   }, []);
 
+  const { isShowing, toggle, register } = useModal();
+
   /**
    * Fetch the search results and update the state with the result.
    * Also cancels the previous query before making the new one.
@@ -88,6 +90,21 @@ const Search = (props) => {
     }
   };
 
+  const handleSearch = () => {
+    const query = document.getElementById(
+      `search-input${search ? '-up' : '-down'}`
+    ).value;
+    if (!query) {
+      setResults({});
+      setMessage('');
+    } else {
+      setLoading(true);
+      setMessage('');
+      setSearch(true);
+      fetchSearchResults(1, query);
+    }
+  };
+
   /**
    * handle popup-toggling between register and login
    * @param {*} event default event when button is clicked
@@ -110,10 +127,23 @@ const Search = (props) => {
     setQuery('');
   };
 
+  /**
+   * handle popup-toggling between register and login
+   * @param {*} event default event when button is clicked
+   */
+  const handleToggle = (event) => {
+    if (event.currentTarget.id === 'register') {
+      toggle(true);
+    } else {
+      toggle(false);
+    }
+  };
+
   return (
     <div className='container'>
       {/*	Heading*/}
       <div className={`header${search ? '-up' : '-down'}`}>
+        {/* Header left */}
         <div className={`header-left${search ? '-up' : '-down'}`}>
           <Link to='/'>
             <img
@@ -124,6 +154,7 @@ const Search = (props) => {
             />
           </Link>
         </div>
+        {/* Header middle */}
         <div className={`header-middle${search ? '-up' : '-down'}`}>
           <div className={`${search ? 'hide' : 'logo-text'}`}>
             <img className='logo' src={Logo} alt='Logo'></img>
@@ -163,7 +194,7 @@ const Search = (props) => {
             </label>
           </div>
         </div>
-
+        {/* Header right */}
         <div className={`header-right${search ? '-up' : '-down'}`}>
           <button id='register' onClick={handleToggle}>
             Register
