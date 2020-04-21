@@ -42,6 +42,7 @@ const SearchResult = (props) => {
 
   /** gets the movies' data */
   const getTitles = () => {
+    setTitles([]);
     const requests = movieIds
       .slice(0, mVisible)
       .map((id) => titleService.getTitle(id));
@@ -53,6 +54,7 @@ const SearchResult = (props) => {
 
   /** gets the actors' data */
   const getNames = () => {
+    setNames([]);
     const requests = actorIds
       .slice(0, aVisible)
       .map((id) => nameService.getName(id));
