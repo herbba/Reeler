@@ -1,32 +1,45 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Search.css';
 import Loader from '../loader.gif';
 import Logo from '../images/logo.png';
 import Menu from '../images/menu.png';
-import PageNavigation from './PageNavigation';
-import searchService from '../services/searchResults';
+import Modal from './Modal';
+import useModal from './useModal';
+import history from '../history';
+import { Link, Redirect } from 'react-router-dom';
 import cancelService from '../services/cancel';
-import titleService from '../services/titles';
-import nameService from '../services/names';
-import SearchResult from './SearchResult';
-import Modal from "./Modal"
-import useModal from "./useModal"
+import searchService from '../services/searchResults';
 
-import MoviePage from './MoviePage';
-import ActorPage from './ActorPage';
-
-const Search = () => {
-  const [query, setQuery] = useState('');
+const Search = (props) => {
   const [results, setResults] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [item, setItem] = useState(null);
-  const [itemType, setItemType] = useState('');
+  const [search, setSearch] = useState(history.location.search ? true : false);
   const [cancel, setCancel] = useState('');
-  const [search, setSearch] = useState(false);
+  const [query, setQuery] = useState(
+    history.location.search
+      ? decodeURI(history.location.search.substring(3))
+      : ''
+  );
+  const [enter, setEnter] = useState(true);
+  const { isShowing, toggle, register } = useModal();
 
-  const {isShowing, toggle, register} = useModal();
+  /**
+   * on component mount, if url has search, title or name in it,
+   * show the search bar on top
+   */
+  useEffect(() => {
+    setSearch(
+      history.location.pathname.includes('search') ||
+        history.location.pathname.includes('titles') ||
+        history.location.pathname.includes('names')
+        ? true
+        : false
+    );
+  }, []);
+
+  useEffect(() => {}, [query]);
 
   /**
    * Fetch the search results and update the state with the result.
@@ -36,7 +49,7 @@ const Search = () => {
    * @param {String} query Search Query.
    *
    */
-  const fetchSearchResults = (updatedPageNo = '', query) => {
+  const fetchSearchResults = (q) => {
     //const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
 
     if (cancel) {
@@ -46,7 +59,7 @@ const Search = () => {
     setCancel(cancelService.cancelToken);
 
     searchService
-      .getResults(query)
+      .getResults(q)
       .then((res) => {
         const resultNotFoundMsg = !res.results.length
           ? 'ei oo mitään muuta'
@@ -54,141 +67,38 @@ const Search = () => {
         setResults(res.results);
         setMessage(resultNotFoundMsg);
         setLoading(false);
+        setEnter(true);
       })
       .catch((error) => {
         if (cancelService.isCancel(error) || error) {
           setLoading(false);
-          setMessage('EI LÖYTYNY DATAA fetchSearchResults');
+          setMessage('EI LÖYTYNY DATAA');
         }
       });
   };
 
   /**
-   * When enter is pressed search results will be fetched
+   * When enter is pressed search bar to the top and
+   * enter sets to true
+   * @param {*} event default event on input change
    */
-  const handleOnInputChange = (event) => {
+  const handleOnInputChange = (event, q) => {
     if (event.keyCode === '13' || event.key === 'Enter') {
-      const query = event.target.value;
-
-      if (!query) {
-        setResults({});
-        setMessage('');
-      } else {
-        setLoading(true);
-        setMessage('');
-        setSearch(true);
-        fetchSearchResults(1, query);
-      }
+      handleSearch(q);
     }
   };
 
-  const handleSearch = () => {
-    const query = document.getElementById(`search-input${search ? '-up' : '-down'}`).value;
-      if (!query) {
-        setResults({});
-        setMessage('');
-      } else {
-        setLoading(true);
-        setMessage('');
-        setSearch(true);
-        fetchSearchResults(1, query);
-      }
-  }
-
-  /**
-   * shows current item's information
-   *
-   */
-  const showItem = () => {
-    console.log('itemtype', itemType);
-    console.log('item', item);
-    if (item.nconst.charAt(0) === 'm') {
-      console.log('movie');
-      return (
-        <>
-          <button onClick={() => setItem(null)}>back</button>
-          <MoviePage mov={item} />
-        </>
-      );
-    } else {
-      return (
-        <>
-          <button onClick={() => setItem(null)}>back</button>
-          <ActorPage act={item} onItemClick={itemUpdate} />
-        </>
-      );
+  /** Shows loading-indicator
+   * sets the search bar on top
+   * fetches search results
+   * switches router to searchresults */
+  const handleSearch = (q) => {
+    if (q) {
+      setLoading(true);
+      setSearch(true);
+      fetchSearchResults(q);
+      setEnter(true);
     }
-  };
-
-  /**
-   * Eventhandler for clicking search results
-   * Gets a movie element and sets it to item and updates isMovie
-   *
-   * @param {String} itemId items id ie. tt12456
-   * @param {Boolean} isMovie true if item is movie, false is not.
-   * @param {event} e default event when item is clicked
-   *
-   */
-  const itemUpdate = (itemId, e) => {
-    e.preventDefault();
-    console.log('itemid', itemId);
-    if (itemId.charAt(0) === 't') {
-      titleService
-        .getTitle(itemId)
-        .then((res) => {
-          setItem(res);
-          setItemType(res.titletype.trim());
-          setLoading(false);
-        })
-        .catch((error) => {
-          if (cancelService.isCancel(error) || error) {
-            setLoading(false);
-            setMessage('EI LÖYTYNY DATAA itemupdate');
-            console.log('itemupdaterror', error);
-          }
-        });
-    } else {
-      console.log('nameservice');
-      nameService
-        .getName(itemId)
-        .then((res) => {
-          console.log('resoinse', res);
-          setItem(res);
-          setItemType('actor');
-          setLoading(false);
-        })
-        .catch((error) => {
-          if (cancelService.isCancel(error) || error) {
-            setLoading(false);
-            setMessage('EI LÖYTYNY DATAA itemupdate');
-            console.log('itemupdaterror', error);
-          }
-        });
-    }
-  };
-
-  /**
-   * Displays search results on the page
-   */
-  const showSearchResults = () => {
-    if (Object.keys(results).length && results.length) {
-      return (
-        <>
-          <SearchResult results={results} onItemClick={itemUpdate} />;
-        </>
-      );
-    }
-  };
-
-  /**
-   * event handler for clicking on menu
-
-   * TODO: correct functionality
-
-   */
-  const handleMenu = () => {
-    setSearch(false);
-    setResults({});
   };
 
   /**
@@ -197,12 +107,23 @@ const Search = () => {
    */
   const handleToggle = (event) => {
     if (event.currentTarget.id === 'register') {
-      toggle(true)
-    }
-    else {
+      toggle(true);
+    } else {
       toggle(false);
     }
-  }
+  };
+
+  /**
+   * event handler for clicking on menu
+   * TODO: correct functionality
+   */
+  const handleMenu = () => {
+    setLoading(false);
+    setMessage('');
+    setSearch(false);
+    setResults({});
+    setQuery('');
+  };
 
   return (
     <div className='container'>
@@ -210,7 +131,14 @@ const Search = () => {
       <div className={`header${search ? '-up' : '-down'}`}>
         {/* Header left */}
         <div className={`header-left${search ? '-up' : '-down'}`}>
-          <img className={`menu${search ? '' : ' hide'}`} src={Menu} alt='menu' onClick={handleMenu} />
+          <Link to='/'>
+            <img
+              className={`menu${search ? '' : ' hide'}`}
+              src={Menu}
+              alt='menu'
+              onClick={handleMenu}
+            />
+          </Link>
         </div>
         {/* Header middle */}
         <div className={`header-middle${search ? '-up' : '-down'}`}>
@@ -218,18 +146,28 @@ const Search = () => {
             <img className='logo' src={Logo} alt='Logo'></img>
             <p className='text'>Reel in the movies</p>
           </div>
-          {/* Search Input*/}
+          {/* Search Input */}
           <div className='search-bar'>
             <label className='search-label' htmlFor='search-input'>
               <input
                 type='text'
+                value={query}
                 name='query'
                 id={`search-input${search ? '-up' : '-down'}`}
-                onKeyDown={handleOnInputChange}
+                onChange={(event) => {
+                  setEnter(false);
+                  setQuery(event.target.value);
+                  //fetchSearchResults(event.target.value);
+                }}
+                onKeyDown={(e) => handleOnInputChange(e, query)}
               />
-              {/*TODO: Button search-function*/}
-              <button id={`search-button${search ? '-up' : '-down'}`}
-              onClick={handleSearch}>
+              {/*On button click switch router*/}
+              <button
+                id={`search-button${search ? '-up' : '-down'}`}
+                onClick={() => {
+                  handleSearch(query);
+                }}
+              >
                 <i className='fa fa-search'></i>
               </button>
             </label>
@@ -237,27 +175,36 @@ const Search = () => {
         </div>
         {/* Header right */}
         <div className={`header-right${search ? '-up' : '-down'}`}>
-          <button id='register' onClick={handleToggle}>Register</button>
-          <button id='login' onClick={handleToggle}>Log in</button>
+          <button id='register' onClick={handleToggle}>
+            Register
+          </button>
+          <button id='login' onClick={handleToggle}>
+            Log in
+          </button>
         </div>
       </div>
-
       {/*Pop-up*/}
-      <Modal isShowing={isShowing}  hide={toggle} register={register}/>
-
+      <Modal isShowing={isShowing} hide={toggle} register={register} />
       {/*	Error Message*/}
       {message && <p className='message'>{message}</p>}
-
       {/*	Loader*/}
       <img
         src={Loader}
         className={`search-loading ${loading ? 'show' : 'hide'}`}
         alt='loader'
       />
-      {/* Results or MoviePage */}
-      {item === null ? showSearchResults() : showItem()}
+      {/* if enter is pressed and there is results, switch router */}
+      {enter && results.length ? (
+        <Redirect
+          to={{
+            pathname: `/search?q=${query}`,
+            state: { results: results },
+          }}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
-
 export default Search;

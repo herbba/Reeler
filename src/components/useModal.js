@@ -5,10 +5,9 @@ const useModal = () => {
   const [register, setRegister] = useState(false);
 
   function toggle(register) {
-    if(register) {
+    if (register) {
       setRegister(true);
-    }
-    else {
+    } else {
       setRegister(false);
     }
     setIsShowing(!isShowing);
@@ -18,7 +17,7 @@ const useModal = () => {
     register,
     isShowing,
     toggle,
-  }
+  };
 };
 
 export default useModal;

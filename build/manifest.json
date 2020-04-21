@@ -1,0 +1,9 @@
+{
+  "name": "ReelGeek",
+  "short_name": "ReelGeek",
+  "theme_color": "#e31b00",
+  "background_color": "#ffffff",
+  "display": "browser",
+  "scope": "/",
+  "start_url": "/"
+}

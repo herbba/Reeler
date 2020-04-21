@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import titleService from '../services/titles';
+import history from '../history';
 
-const MoviePage = ({ mov }) => {
+const MoviePage = (props) => {
+  const movieId = props.location.state.itemId;
+  const [movie, setMovie] = useState({});
+
+  /* when movieId changes, gets movie's data */
+  useEffect(() => {
+    titleService.getTitle(movieId).then((res) => setMovie(res));
+  }, [movieId]);
+
+  /* calculates minutes to hours and minutes. Doesn't show ex. 0h 10min or 2h 0min*/
   const runTimeToHours = () => {
-    const runtime = mov.runtimeminutes;
+    const runtime = movie.runtimeminutes;
     const hours = runtime / 60;
     const rhours = Math.floor(hours);
     const minutes = (hours - rhours) * 60;
@@ -20,19 +31,23 @@ const MoviePage = ({ mov }) => {
 
   return (
     <div className='movieContainer'>
+      {/*On click goes back to the previous page*/}
+      <p className='resultItem link' onClick={() => history.goBack()}>
+        Back
+      </p>
       <div className='movieHeader'>
-        <p className='paddedText'>{mov.titletype}</p>
-        <h1 className='paddedText'>{mov.primarytitle}</h1>
-        {mov.endyear ? (
+        <p className='paddedText'>{movie.titletype}</p>
+        <h1 className='paddedText'>{movie.primarytitle}</h1>
+        {movie.endyear ? (
           <h2 className='paddedText'>
-            {mov.startyear} - {mov.endyear}
+            {movie.startyear} - {movie.endyear}
           </h2>
         ) : (
-          <h3 className='paddedText'>{mov.startyear}</h3>
+          <h3 className='paddedText'>{movie.startyear}</h3>
         )}
         <div className='movieInfo'>
           {runTimeToHours()}
-          {mov.genres.join(', ')}
+          {movie.genres ? movie.genres.join(', ') : ''}
         </div>
       </div>
     </div>

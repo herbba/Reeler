@@ -236,10 +236,6 @@ li:nth-child(even) {
   padding: 30px;
 }
 
-
-
-
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -248,7 +244,7 @@ li:nth-child(even) {
   width: 100vw;
   height: 100vh;
   background-color: black;
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .modal-wrapper {
@@ -286,7 +282,7 @@ li:nth-child(even) {
   right: 20px;
   font-weight: 1000;
   line-height: 1;
-  opacity: .8;
+  opacity: 0.8;
   cursor: pointer;
   border: 2px solid #f65900;
   border-radius: 9999px;

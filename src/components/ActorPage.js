@@ -1,24 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import nameService from '../services/names';
+import { Link } from 'react-router-dom/';
+import history from '../history';
 
-const ActorPage = ({ act, onItemClick }) => {
+const ActorPage = (props) => {
+  const actorId = props.location.state.itemId;
+  const [actor, setActor] = useState({});
+
+  /* when actorIDd changes, gets actor's data */
+  useEffect(() => {
+    nameService.getName(actorId).then((res) => setActor(res));
+  }, [actorId]);
+
+  /* if actor has known titles, lists the links to them */
   const mapFilmo = () => {
-    return act.knownfortitles.map((titleId) => (
-      <li className='filmography' key={titleId}>
-        {titleId}
-      </li>
-    ));
+    return actor.knownfortitles
+      ? actor.knownfortitles.map((titleId) => (
+          <li className='filmography' key={titleId}>
+            {/* If link clicked, switch routes */}
+            <Link
+              className='filmography'
+              to={{
+                pathname: `/titles/${titleId}`,
+                state: { itemId: titleId },
+              }}
+            >
+              {titleId}
+            </Link>
+          </li>
+        ))
+      : '';
+  };
+
+  /* if actor has professions, adds spaces bewteen the commas */
+  const styleProfession = () => {
+    return actor.primaryprofession
+      ? actor.primaryprofession.replace(/,/g, ', ')
+      : '';
   };
 
   return (
     <div className='movieContainer'>
+      {/*On click goes back to the previous page*/}
+      <p className='resultItem link' onClick={() => history.goBack()}>
+        Back
+      </p>
+
       <div className='movieHeader'>
-        <h1 className='paddedText'>{act.primaryname}</h1>
-        <p className='paddedText'>
-          {act.primaryprofession.replace(/,/g, ', ')}
-        </p>
+        <h1 className='paddedText'>{actor.primaryname}</h1>
+        <p className='paddedText'>{styleProfession()}</p>
         <div className='paddedText'>
-          <p>Born: {act.birthyear ? act.birthyear : 'unknown'}</p>
-          <p>{act.deathyear ? 'Died: ' + act.deathyear : ''}</p>
+          <p>Born: {actor.birthyear ? actor.birthyear : 'unknown'}</p>
+          <p>{actor.deathyear ? 'Died: ' + actor.deathyear : ''}</p>
         </div>
       </div>
       <div>

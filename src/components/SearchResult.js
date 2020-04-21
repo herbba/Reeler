@@ -1,40 +1,54 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom/';
+import '../Search.css';
 import '../Search.css';
 
-const SearchResult = ({ results, onItemClick }) => {
+const SearchResult = (props) => {
   const [mVisible, setMVisible] = useState(4);
   const [aVisible, setAVisible] = useState(4);
-  const [movies, setMovies] = useState(
-    results.filter((result) => result.charAt(0) === 't')
-  );
-  const [actors, setActors] = useState(
-    results.filter((result) => result.charAt(0) === 'n')
-  );
+  const movies = props.location.state.results
+    ? props.location.state.results.filter((item) => item.includes('tt'))
+    : {};
+  const actors = props.location.state.results
+    ? props.location.state.results.filter((item) => item.includes('nm'))
+    : {};
 
   const loadMore = (type) => {
-    type === 'm' ? setMVisible(mVisible + 4) : setAVisible(aVisible + 4);
+    type === 'tt' ? setMVisible(mVisible + 4) : setAVisible(aVisible + 4);
   };
 
-  //kutsu näin: <ul>{mapActorResults()}</ul>
-  const mapResults = (data, visible) =>
-    data.slice(0, visible).map((res) => (
-      <li key={res}>
-        <p className='resultItem link' onClick={(e) => onItemClick(res, e)}>
-          {res}
-        </p>
+  useEffect(() => {
+    console.log('movies', movies);
+    console.log('actors', actors);
+    console.log('props', props.location.state.results);
+  });
+
+  /* Shows the right amount (visible) of results as a list of links */
+  const mapResults = (data, visible, baseUrl) =>
+    data.slice(0, visible).map((resId) => (
+      <li key={resId}>
+        {/* When link clicked, switches routes */}
+        <Link
+          to={{
+            pathname: `${baseUrl}${resId}`,
+            state: {
+              itemId: resId,
+            },
+          }}
+        >
+          <p className='resultItem link'>{resId}</p>
+        </Link>
       </li>
     ));
 
-  const resultDiv = (type, data, visibility) => (
+  /* Shows the right results according to the result id */
+  const resultDiv = (type, data, visibility, baseUrl) => (
     <div>
-      <h2 className='paddedText'>{type}</h2>
-      <ul>{mapResults(data, visibility)}</ul>
+      <h2 className='paddedText'>{type === 'tt' ? 'Movies' : 'Actors'}</h2>
+      <ul>{mapResults(data, visibility, baseUrl)}</ul>
       {data && data.length > visibility ? (
-        <p
-          className='resultItem link'
-          onClick={() => (type === 'Movies' ? loadMore('m') : loadMore('n'))}
-        >
+        <p className='resultItem link' onClick={() => loadMore(type)}>
           More results
         </p>
       ) : (
@@ -45,8 +59,8 @@ const SearchResult = ({ results, onItemClick }) => {
 
   return (
     <div className='results'>
-      {resultDiv('Movies', movies, mVisible)}
-      {resultDiv('Actors', actors, aVisible)}
+      {resultDiv('tt', movies, mVisible, '/titles/')}
+      {resultDiv('nm', actors, aVisible, '/names/')}
     </div>
   );
 };
