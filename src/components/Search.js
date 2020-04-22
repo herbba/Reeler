@@ -198,7 +198,7 @@ const Search = (props) => {
         <Redirect
           to={{
             pathname: `/search?q=${query}`,
-            state: { results: results },
+            state: { results: results, visibility: 4 },
           }}
         />
       ) : (

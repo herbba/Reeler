@@ -1,31 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import nameService from '../services/names';
+
 import { Link } from 'react-router-dom/';
 import history from '../history';
+import axios from 'axios';
+import titleService from '../services/titles';
 
 const ActorPage = (props) => {
-  const actorId = props.location.state.itemId;
   const [actor, setActor] = useState({});
+  const [titles, setTitles] = useState([]);
 
-  /* when actorIDd changes, gets actor's data */
+/* const knownForIds = props.location.state.results
+    ? props.location.state.results.filter((item) => item.includes('tt'))
+    : {}; */
+    
+  /* when location.props.state is changed, sets the state to actors and
+  * gets the data for knownfor titles
+   */
   useEffect(() => {
-    nameService.getName(actorId).then((res) => setActor(res));
-  }, [actorId]);
+    setActor(props.location.state);
+    const requests = props.location.state.knownfortitles.map(id => titleService.getTitle(id)) 
+    axios.all(requests).then(axios.spread((...responses) => setTitles(responses)))
+
+  }, [props.location.state]);
+
 
   /* if actor has known titles, lists the links to them */
   const mapFilmo = () => {
-    return actor.knownfortitles
-      ? actor.knownfortitles.map((titleId) => (
-          <li className='filmography' key={titleId}>
+    return titles
+      ? titles.map((t) => (
+          <li className='filmography' key={t.tconst}>
             {/* If link clicked, switch routes */}
             <Link
               className='filmography'
               to={{
-                pathname: `/titles/${titleId}`,
-                state: { itemId: titleId },
+                pathname: `/titles/${t.tconst}`,
+                state: { itemId: t.tconst },
               }}
             >
-              {titleId}
+              {t.primarytitle}
             </Link>
           </li>
         ))

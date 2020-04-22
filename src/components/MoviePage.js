@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import titleService from '../services/titles';
 import history from '../history';
 
 const MoviePage = (props) => {
-  const movieId = props.location.state.itemId;
   const [movie, setMovie] = useState({});
 
   /* when movieId changes, gets movie's data */
   useEffect(() => {
-    titleService.getTitle(movieId).then((res) => setMovie(res));
-  }, [movieId]);
+    setMovie(props.location.state);
+  }, [props.location.state]);
 
   /* calculates minutes to hours and minutes. Doesn't show ex. 0h 10min or 2h 0min*/
   const runTimeToHours = () => {
