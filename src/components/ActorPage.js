@@ -8,21 +8,30 @@ import titleService from '../services/titles';
 const ActorPage = (props) => {
   const [actor, setActor] = useState({});
   const [titles, setTitles] = useState([]);
+  const [movieIds, setMovieIds] = useState([]);
 
-/* const knownForIds = props.location.state.results
+  /* const knownForIds = props.location.state.results
     ? props.location.state.results.filter((item) => item.includes('tt'))
     : {}; */
-    
+
   /* when location.props.state is changed, sets the state to actors and
-  * gets the data for knownfor titles
+   * gets the data for knownfor titles
    */
   useEffect(() => {
     setActor(props.location.state);
-    const requests = props.location.state.knownfortitles.map(id => titleService.getTitle(id)) 
-    axios.all(requests).then(axios.spread((...responses) => setTitles(responses)))
-
+    getTitles();
   }, [props.location.state]);
 
+  /** gets the movies' data */
+  const getTitles = () => {
+    setTitles([]);
+    const requests = props.location.state.knownfortitles.map((id) =>
+      titleService.getTitle(id)
+    );
+    axios
+      .all(requests)
+      .then(axios.spread((...responses) => setTitles(responses)));
+  };
 
   /* if actor has known titles, lists the links to them */
   const mapFilmo = () => {
@@ -34,7 +43,17 @@ const ActorPage = (props) => {
               className='filmography'
               to={{
                 pathname: `/titles/${t.tconst}`,
-                state: { itemId: t.tconst },
+                state: {
+                  endyear: t.endyear,
+                  genres: t.genres,
+                  isadult: t.isadult,
+                  originaltitle: t.originaltitle,
+                  primarytitle: t.primarytitle,
+                  runtimeminutes: t.runtimeminutes,
+                  startyear: t.startyear,
+                  tconst: t.tconst,
+                  titletype: t.titletype,
+                },
               }}
             >
               {t.primarytitle}
