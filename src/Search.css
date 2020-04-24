@@ -387,6 +387,37 @@ li:nth-child(even) {
   color: var(--main-text-color);
 }
 
+/* Clear floats after image containers */
+.pageImagesRow {
+  display: flex;
+  width: 100%;
+
+  justify-content: space-between;
+}
+
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.pageImagesColumn {
+  padding: 5px;
+  flex: 25%;
+  overflow: hidden;
+  text-align: right;
+}
+
+.pageImagesColumnWide {
+  padding: 5px;
+  flex: calc(276 / 183);
+  overflow: hidden;
+  text-align: right;
+}
+
+.pageImg {
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/*================= ACTOR PAGE ===================*/
+
 li.filmographyListItem {
   display: flex;
   justify-content: space-between;
@@ -420,34 +451,6 @@ li:nth-child(even).filmography {
   background-color: rgb(213, 213, 213);
 }
 
-/* Clear floats after image containers */
-.pageImagesRow {
-  display: flex;
-  width: 100%;
-
-  justify-content: space-between;
-}
-
-/* Three image containers (use 25% for four, and 50% for two, etc) */
-.pageImagesColumn {
-  padding: 5px;
-  flex: 25%;
-  overflow: hidden;
-  text-align: right;
-}
-
-.pageImagesColumnWide {
-  padding: 5px;
-  flex: calc(276 / 183);
-  overflow: hidden;
-  text-align: right;
-}
-
-.pageImg {
-  width: 100%;
-  height: auto;
-  vertical-align: middle;
-}
 .mk1 {
   flex: calc(191 / 263);
 }
@@ -460,5 +463,46 @@ li:nth-child(even).filmography {
   flex: calc(201 / 251);
 }
 
-/*========================================*/
-/*========================================*/
+/*================== Movie page======================*/
+
+li.castListItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+}
+
+ul.cast {
+  padding: 0;
+  margin: 0;
+}
+
+.castListItem * {
+  padding: 0;
+  margin: 2px;
+}
+
+li:nth-child(even).cast {
+  background-color: rgb(213, 213, 213);
+}
+
+.bm1 {
+  flex: calc(259 / 389);
+}
+
+.bm2 {
+  flex: calc(184 / 273);
+}
+
+.bm3 {
+  flex: calc(289 / 174);
+}
+
+.movieTitle {
+  padding: 0;
+  margin-bottom: 0;
+}
+.movieYear {
+  padding: 0;
+  margin: 0;
+}
