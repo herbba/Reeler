@@ -28,22 +28,22 @@ const MoviePage = (props) => {
   };
 
   return (
-    <div className='movieContainer'>
+    <div className='pageContainer'>
       {/*On click goes back to the previous page*/}
-      <p className='resultItem link' onClick={() => history.goBack()}>
+      {/* <p className='resultItem link' onClick={() => history.goBack()}>
         Back
-      </p>
-      <div className='movieHeader'>
-        <p className='paddedText'>{movie.titletype}</p>
-        <h1 className='paddedText'>{movie.primarytitle}</h1>
+      </p> */}
+      <div className='pageHeaderContainer'>
+        <p className='pageAbstract'>{movie.titletype}</p>
+        <h1 className='pageHeader'>{movie.primarytitle}</h1>
         {movie.endyear ? (
-          <h2 className='paddedText'>
+          <h2 className='pageAbstract'>
             {movie.startyear} - {movie.endyear}
           </h2>
         ) : (
-          <h3 className='paddedText'>{movie.startyear}</h3>
+          <h3 className='pageAbstract'>{movie.startyear}</h3>
         )}
-        <div className='movieInfo'>
+        <div className='pageAbstract'>
           {runTimeToHours()}
           {movie.genres ? movie.genres.join(', ') : ''}
         </div>
