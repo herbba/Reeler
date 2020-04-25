@@ -93,7 +93,7 @@ const ActorPage = (props) => {
   const mapImages = () => {
     return actor.images ? (
       actor.images.map((img) => (
-        <div className={`pageImagesColumn ${img}`}>
+        <div className={`pageImagesColumn ${img}`} key={img}>
           <img
             className='pageImg'
             src={require(`../images/${img}.jpg`)}
@@ -108,11 +108,6 @@ const ActorPage = (props) => {
 
   return props.location.state.nconst === 'nm0000474' ? (
     <div className='pageContainer'>
-      {/*On click goes back to the previous page*/}
-      {/* <p className='resultItem link' onClick={() => history.goBack()}>
-        Back
-      </p>
- */}
       <div className='pageHeaderContainer'>
         <h1 className='pageHeader'>{actor.primaryname}</h1>
         <div className='pageImagesRow'>{mapImages()}</div>

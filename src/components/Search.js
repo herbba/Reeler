@@ -39,8 +39,6 @@ const Search = (props) => {
     );
   }, []);
 
-  useEffect(() => {}, [query]);
-
   /**
    * Fetch the search results and update the state with the result.
    * Also cancels the previous query before making the new one.
@@ -93,11 +91,13 @@ const Search = (props) => {
    * fetches search results
    * switches router to searchresults */
   const handleSearch = (q) => {
-    if (q) {
+    if (q && q.length > 3) {
       setLoading(true);
       setSearch(true);
       fetchSearchResults(q);
-      setEnter(true);
+      //setEnter(true);
+    } else {
+      setMessage('Search query should be at least 4 digits long');
     }
   };
 
@@ -155,9 +155,9 @@ const Search = (props) => {
                 name='query'
                 id={`search-input${search ? '-up' : '-down'}`}
                 onChange={(event) => {
+                  setMessage('');
                   setEnter(false);
                   setQuery(event.target.value);
-                  //fetchSearchResults(event.target.value);
                 }}
                 onKeyDown={(e) => handleOnInputChange(e, query)}
               />
@@ -186,7 +186,9 @@ const Search = (props) => {
       {/*Pop-up*/}
       <Modal isShowing={isShowing} hide={toggle} register={register} />
       {/*	Error Message*/}
-      {message && <p className='message'>{message}</p>}
+      {message && (
+        <p className={`message${search ? '-up' : '-down'}`}>{message}</p>
+      )}
       {/*	Loader*/}
       <img
         src={Loader}
