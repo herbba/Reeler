@@ -70,10 +70,10 @@ const MoviePage = (props) => {
       rhours === 0 && rminutes === 0
         ? null
         : rhours === 0 && rminutes !== 0
-        ? rminutes + ' min | '
-        : rhours !== 0 && rminutes === 0
-        ? rhours + ' h | '
-        : rhours + ' h ' + rminutes + ' min | ';
+          ? rminutes + ' min | '
+          : rhours !== 0 && rminutes === 0
+            ? rhours + ' h | '
+            : rhours + ' h ' + rminutes + ' min | ';
     return returnvalue;
   };
 
@@ -81,7 +81,6 @@ const MoviePage = (props) => {
     return movie.images ? (
       movie.images.map((img) => (
         <div className={`pageImagesColumn ${img}`} key={img}>
-          {console.log('image', img)}
           <img
             className='pageImg'
             src={require(`../images/${img}.jpg`)}
@@ -90,47 +89,47 @@ const MoviePage = (props) => {
         </div>
       ))
     ) : (
-      <div>images not found</div>
-    );
+        <div>images not found</div>
+      );
   };
 
   /* if actor has known titles, lists the links to them */
   const mapCast = () => {
     return names
       ? names.map((n) => (
-          <li className='castListItem' key={n.nconst}>
-            {/* If link clicked, switch routes */}
-            <Link
-              className='link castlink'
-              to={{
-                pathname: `/names/${n.nconst}`,
-                state: {
-                  birthyear: n.birthyear,
-                  deathyear: n.deathyear,
-                  knownfortitles: n.knownfortitles,
-                  nconst: n.nconst,
-                  primaryname: n.primaryname,
-                  primaryprofession: n.primaryprofession,
-                  itemId: n.const,
-                },
-              }}
-            >
-              {n.primarytitle}
-            </Link>
-            <p className='castrole'> - Role </p>
-          </li>
-        ))
+        <li className='castListItem' key={n.nconst}>
+          {/* If link clicked, switch routes */}
+          <Link
+            className='link castlink'
+            to={{
+              pathname: `/names/${n.nconst}`,
+              state: {
+                birthyear: n.birthyear,
+                deathyear: n.deathyear,
+                knownfortitles: n.knownfortitles,
+                nconst: n.nconst,
+                primaryname: n.primaryname,
+                primaryprofession: n.primaryprofession,
+                itemId: n.const,
+              },
+            }}
+          >
+            {n.primarytitle}
+          </Link>
+          <p className='castrole'> - Role </p>
+        </li>
+      ))
       : '';
   };
 
   const mapMockupCast = () => {
     return movie.cast
       ? movie.cast.map((c) => (
-          <li className='castListItem' key={c.primaryname}>
-            <p className='link castlink'>{c.primaryname}</p>
-            <p className='castrole'> - {c.role}</p>
-          </li>
-        ))
+        <li className='castListItem' key={c.primaryname}>
+          <p className='link castlink'>{c.primaryname}</p>
+          <p className='castrole'> - {c.role}</p>
+        </li>
+      ))
       : '';
   };
 
@@ -143,8 +142,8 @@ const MoviePage = (props) => {
             {movie.startyear} - {movie.endyear}
           </h2>
         ) : (
-          <h3 className='pageSubHeader movieYear'>{movie.startyear}</h3>
-        )}
+            <h3 className='pageSubHeader movieYear'>{movie.startyear}</h3>
+          )}
         <div className='pageAbstract'>
           {runTimeToHours()}
           {movie.genres ? movie.genres.join(', ') : ''}
@@ -170,28 +169,28 @@ const MoviePage = (props) => {
       </div>
     </div>
   ) : (
-    <div className='pageContainer'>
-      {/*On click goes back to the previous page*/}
-      {/* <p className='resultItem link' onClick={() => history.goBack()}>
+      <div className='pageContainer'>
+        {/*On click goes back to the previous page*/}
+        {/* <p className='resultItem link' onClick={() => history.goBack()}>
         Back
       </p> */}
-      <div className='pageHeaderContainer'>
-        <p className='pageAbstract'>{movie.titletype}</p>
-        <h1 className='pageHeader'>{movie.primarytitle}</h1>
-        {movie.endyear ? (
-          <h2 className='pageSubHeader'>
-            {movie.startyear} - {movie.endyear}
-          </h2>
-        ) : (
-          <h3 className='pageSubHeader'>{movie.startyear}</h3>
-        )}
-        <div className='pageAbstract'>
-          {runTimeToHours()}
-          {movie.genres ? movie.genres.join(', ') : ''}
+        <div className='pageHeaderContainer'>
+          <p className='pageAbstract'>{movie.titletype}</p>
+          <h1 className='pageHeader'>{movie.primarytitle}</h1>
+          {movie.endyear ? (
+            <h2 className='pageSubHeader'>
+              {movie.startyear} - {movie.endyear}
+            </h2>
+          ) : (
+              <h3 className='pageSubHeader'>{movie.startyear}</h3>
+            )}
+          <div className='pageAbstract'>
+            {runTimeToHours()}
+            {movie.genres ? movie.genres.join(', ') : ''}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default MoviePage;
