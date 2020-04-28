@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import '../Search.css';
 import Loader from '../loader.gif';
 import Logo from '../images/logo.png';
-import Menu from '../images/menu.png';
+import LogoSmall from '../images/logo-small.png';
 import Modal from './Modal';
 import useModal from './useModal';
 import history from '../history';
 import { Link, Redirect } from 'react-router-dom';
 import cancelService from '../services/cancel';
 import searchService from '../services/searchResults';
+import Dropdown from './Dropdown';
 
 const Search = (props) => {
   const [results, setResults] = useState({});
@@ -24,7 +25,7 @@ const Search = (props) => {
   );
   const [enter, setEnter] = useState(true);
   const { isShowing, toggle, register } = useModal();
-
+  const [isOpen, toggleIsOpen] = useState(false);
   /**
    * on component mount, if url has search, title or name in it,
    * show the search bar on top
@@ -114,16 +115,29 @@ const Search = (props) => {
   };
 
   /**
-   * event handler for clicking on menu
-   * TODO: correct functionality
+   * Return to homepage, reset states
    */
-  const handleMenu = () => {
+  const handleReturn = () => {
+    setResults({});
     setLoading(false);
     setMessage('');
-    setSearch(false);
-    setResults({});
-    setQuery('');
+    setSearch(history.location.search ? true : false);
+    setCancel('');
+    setQuery(
+      history.location.search
+        ? decodeURI(history.location.search.substring(3))
+        : ''
+    );
+    toggleIsOpen(false);
+    setEnter(true);
   };
+
+  /**
+   * Toggle isOpen from Dropdown/menu
+   */
+  const handleMenu = () => {
+    toggleIsOpen(!isOpen);
+  }
 
   return (
     <div className='container'>
@@ -131,19 +145,29 @@ const Search = (props) => {
       <div className={`header${search ? '-up' : '-down'}`}>
         {/* Header left */}
         <div className={`header-left${search ? '-up' : '-down'}`}>
-          <Link to='/'>
-            <img
-              className={`menu${search ? '' : ' hide'}`}
-              src={Menu}
-              alt='menu'
-              onClick={handleMenu}
-            />
+          <div>
+            <div className='menu' onClick={handleMenu}>
+              <div className='menu-icon'></div>
+              <div className='menu-icon'></div>
+              <div className='menu-icon'></div>
+            </div>
+            {isOpen ? <Dropdown handleReturn={handleReturn}/> : <></>}
+          </div>
+          {/* Header logo + text */}
+          <Link className='bar-link' to='/'>
+            <div onClick={handleReturn} className={`header-logo-text${search ? '' : ' hide'}`}>
+              <img src={LogoSmall} className='header-logo-small'></img>
+              <div>
+                <div className='header-logo-label'>ReelGeek</div>
+                <div className='header-logo-motto'>Reel in the movies</div>
+              </div>
+            </div>
           </Link>
         </div>
         {/* Header middle */}
         <div className={`header-middle${search ? '-up' : '-down'}`}>
           <div className={`${search ? 'hide' : 'logo-text'}`}>
-            <img className='logo' src={Logo} alt='Logo'></img>
+            <img className='logo' src={Logo} alt='Logo'/>
             <p className='text'>Reel in the movies</p>
           </div>
           {/* Search Input */}
