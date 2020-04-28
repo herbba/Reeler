@@ -55,31 +55,30 @@ const ActorPage = (props) => {
   const mapFilmo = () => {
     return titles
       ? titles.map((t) => (
-          <li className='filmographyListItem' key={t.tconst}>
-            {/* If link clicked, switch routes */}
-            <Link
-              className='link filmolink'
-              to={{
-                pathname: `/titles/${t.tconst}`,
-                state: {
-                  endyear: t.endyear,
-                  genres: t.genres,
-                  isadult: t.isadult,
-                  originaltitle: t.originaltitle,
-                  primarytitle: t.primarytitle,
-                  runtimeminutes: t.runtimeminutes,
-                  startyear: t.startyear,
-                  tconst: t.tconst,
-                  titletype: t.titletype,
-                },
-              }}
-            >
-              {t.primarytitle}
-            </Link>
-            <p className='filmorole'> - Role </p>
-            <p className='filmoyear'> {t.startyear}</p>
-          </li>
-        ))
+        <li className='filmographyListItem' key={t.tconst}>
+          {/* If link clicked, switch routes */}
+          <Link
+            className='link filmolink'
+            to={{
+              pathname: `/titles/${t.tconst}`,
+              state: {
+                endyear: t.endyear,
+                genres: t.genres,
+                isadult: t.isadult,
+                originaltitle: t.originaltitle,
+                primarytitle: t.primarytitle,
+                runtimeminutes: t.runtimeminutes,
+                startyear: t.startyear,
+                tconst: t.tconst,
+                titletype: t.titletype,
+              },
+            }}
+          >
+            {t.primarytitle}
+          </Link>
+          <p className='filmoyear'> {t.startyear}</p>
+        </li>
+      ))
       : '';
   };
 
@@ -102,8 +101,8 @@ const ActorPage = (props) => {
         </div>
       ))
     ) : (
-      <div>images not found</div>
-    );
+        <div>images not found</div>
+      );
   };
 
   return props.location.state.nconst === 'nm0000474' ? (
@@ -134,26 +133,26 @@ const ActorPage = (props) => {
       </div>
     </div>
   ) : (
-    <div className='pageContainer'>
-      {/*On click goes back to the previous page*/}
-      {/* <p className='resultItem link' onClick={() => history.goBack()}>
+      <div className='pageContainer'>
+        {/*On click goes back to the previous page*/}
+        {/* <p className='resultItem link' onClick={() => history.goBack()}>
         Back
       </p>
  */}
-      <div className='pageHeaderContainer'>
-        <h1 className='pageHeader'>{actor.primaryname}</h1>
-        <p className='pageAbstract'>{styleProfession()}</p>
-        <div className='pageAbstract'>
-          <p>Born: {actor.birthyear ? actor.birthyear : 'unknown'}</p>
-          <p>{actor.deathyear ? 'Died: ' + actor.deathyear : ''}</p>
+        <div className='pageHeaderContainer'>
+          <h1 className='pageHeader'>{actor.primaryname}</h1>
+          <p className='pageAbstract'>{styleProfession()}</p>
+          <div className='pageAbstract'>
+            <p>Born: {actor.birthyear ? actor.birthyear : 'unknown'}</p>
+            <p>{actor.deathyear ? 'Died: ' + actor.deathyear : ''}</p>
+          </div>
+        </div>
+        <div>
+          <h2 className='pageSubHeader'>Filmography</h2>
+          <ul>{mapFilmo()}</ul>
         </div>
       </div>
-      <div>
-        <h2 className='pageSubHeader'>Filmography</h2>
-        <ul>{mapFilmo()}</ul>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ActorPage;

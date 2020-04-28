@@ -7,6 +7,10 @@ import titleService from '../services/titles';
 import nameService from '../services/names';
 import axios from 'axios';
 import Loader from '../loader.gif';
+import Heart from '../images/Heart.js';
+import Netflix from '../images/netflix.png';
+import moviePlaceHolder from '../images/movie_placeholder.png';
+import personPlaceHolder from '../images/person_placeholder.png';
 
 const SearchResult = (props) => {
   const [loading, setLoading] = useState(false);
@@ -81,8 +85,10 @@ const SearchResult = (props) => {
   const mapListItems = (type, visible, baseUrl) => {
     return type === 'Movies'
       ? titles.map((t) => (
-          <li key={t.tconst}>
-            {/* When link clicked, switches routes */}
+        <li key={t.tconst} className='searchListItem'>
+          {/* When link clicked, switches routes */}
+          <img src={moviePlaceHolder} className="placeholder moviepl" />
+          <div className='resultItem'>
             <Link
               to={{
                 pathname: `${baseUrl}${t.tconst}`,
@@ -99,15 +105,25 @@ const SearchResult = (props) => {
                 },
               }}
             >
-              <p className='resultItem link'>
-                {t.primarytitle} ({t.startyear}) {t.titletype}
+              <p className='link'>
+                {t.primarytitle}
               </p>
             </Link>
-          </li>
-        ))
+            <p className='leftPadding'>({t.startyear})</p>
+          </div>
+          <div className='searchActions'>
+            <Heart />
+            <a href={`https://www.netflix.com/search?q=${t.primarytitle}`} target="_blank">
+              <img src={Netflix} className='netflix' />
+            </a>
+          </div>
+        </li>
+      ))
       : names.map((n) => (
-          <li key={n.nconst}>
-            {/* When link clicked, switches routes */}
+        <li className='searchListItem actorlist' key={n.nconst}>
+          <img alt="actor image placeholder" src={personPlaceHolder} className=" placeholder personpl" />
+          {/* When link clicked, switches routes */}
+          <div className="resultItem">
             <Link
               to={{
                 pathname: `${baseUrl}${n.nconst}`,
@@ -122,12 +138,15 @@ const SearchResult = (props) => {
                 },
               }}
             >
-              <p className='resultItem link'>
-                {n.primaryname} ({n.birthyear}) {n.primaryprofession}
+              <p className='link'>
+                {n.primaryname}
               </p>
             </Link>
-          </li>
-        ));
+            <p className='leftPadding'>({n.birthyear})</p>
+          </div>
+        </li>
+
+      ));
   };
 
   /* Shows the right results according to the result id */
@@ -140,8 +159,8 @@ const SearchResult = (props) => {
           More results
         </p>
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </div>
   );
 
