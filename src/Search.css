@@ -5,6 +5,7 @@
   --main-text-color: #000000;
   --serif-font-family: 'Average', serif;
   --list-grey-color: #d6d6d6;
+  --heart-color: rgb(237, 93, 38);
 }
 
 html,
@@ -219,10 +220,59 @@ li {
   font-weight: lighter;
 }
 
+.searchListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 50px;
+  padding: 5px;
+}
+
+.actorlist {
+  justify-content: flex-end;
+}
+
 .resultItem {
   text-align: left;
-  padding-left: 50px;
+  padding-left: 10px;
+  flex: 2;
+  display: flex;
 }
+
+.leftPadding {
+  padding-left: 5px;
+}
+/*=============== RESULT IMAGE & SVG HEART & NETFLIX=========== */
+.placeholder {
+  max-height: 50px;
+  height: 100%;
+}
+
+.searchActions {
+  display: flex;
+  justify-content: space-between;
+}
+.heart,
+.netflix {
+  padding: 5px;
+  flex: 1;
+  width: 35px !important;
+  height: 35px !important;
+}
+
+.heart.outline {
+  fill: var(--heart-color);
+}
+
+.heart.fill.red {
+  fill: var(--heart-color);
+}
+
+.heart.fill.white {
+  fill: transparent;
+}
+
+/*============================================*/
 
 .link {
   cursor: pointer;
@@ -461,6 +511,18 @@ li:nth-child(even).filmography {
 
 .mk3 {
   flex: calc(201 / 251);
+}
+
+.bm1 {
+  flex: calc(67 / 100);
+}
+
+.bm2 {
+  flex: calc(973 / 1440);
+}
+
+.bm3 {
+  flex: calc(289 / 174);
 }
 
 /*================== Movie page======================*/
