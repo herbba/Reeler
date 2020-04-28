@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import '../Search.css';
 import Loader from '../loader.gif';
 import Logo from '../images/logo.png';
+import LogoSmall from '../images/logo-small.png';
 import Modal from './Modal';
 import useModal from './useModal';
 import history from '../history';
@@ -152,8 +153,15 @@ const Search = (props) => {
             </div>
             {isOpen ? <Dropdown handleReturn={handleReturn}/> : <></>}
           </div>
-          <Link to='/'>
-            <p onClick={handleReturn}>Homepage</p>
+          {/* Header logo + text */}
+          <Link className='bar-link' to='/'>
+            <div onClick={handleReturn} className={`header-logo-text${search ? '' : ' hide'}`}>
+              <img src={LogoSmall} className='header-logo-small'></img>
+              <div>
+                <div className='header-logo-label'>ReelGeek</div>
+                <div className='header-logo-motto'>Reel in the movies</div>
+              </div>
+            </div>
           </Link>
         </div>
         {/* Header middle */}
