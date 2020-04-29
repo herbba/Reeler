@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Logo from '../images/logo.png';
 
+/**
+ * Create pop-up
+ * @param {*} param0 
+ */
 const Modal = ({ isShowing, hide, register }) =>
   isShowing
     ? ReactDOM.createPortal(
