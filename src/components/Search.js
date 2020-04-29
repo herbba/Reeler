@@ -57,23 +57,33 @@ const Search = (props) => {
 
     setCancel(cancelService.cancelToken);
 
-    searchService
-      .getResults(q)
-      .then((res) => {
-        const resultNotFoundMsg = !res.results.length
-          ? 'ei oo mitään muuta'
-          : '';
-        setResults(res.results);
-        setMessage(resultNotFoundMsg);
-        setLoading(false);
-        setEnter(true);
-      })
-      .catch((error) => {
-        if (cancelService.isCancel(error) || error) {
+    q === "mockup" ?
+      showMockups() :
+      searchService
+        .getResults(q)
+        .then((res) => {
+          const resultNotFoundMsg = !res.results.length
+            ? 'ei oo mitään muuta'
+            : '';
+          setResults(res.results);
+          setMessage(resultNotFoundMsg);
           setLoading(false);
-          setMessage('EI LÖYTYNY DATAA');
-        }
-      });
+          setEnter(true);
+        })
+        .catch((error) => {
+          if (cancelService.isCancel(error) || error) {
+            setLoading(false);
+            setMessage('EI LÖYTYNY DATAA');
+          }
+        });
+  };
+
+  const showMockups = () => {
+    const mockupIds = ["nm0000474", "tt2562232", "tt0094721", "tt4276820", "tt0120338", "tt0096895", "nm0000197", "nm0000107", "nm0000138", "tt0407887", "nm0000701"]
+    setResults(mockupIds);
+    setMessage("")
+    setLoading(false);
+    setEnter(true);
   };
 
   /**
@@ -151,7 +161,7 @@ const Search = (props) => {
               <div className='menu-icon'></div>
               <div className='menu-icon'></div>
             </div>
-            {isOpen ? <Dropdown handleReturn={handleReturn}/> : <></>}
+            {isOpen ? <Dropdown handleReturn={handleReturn} /> : <></>}
           </div>
           {/* Header logo + text */}
           <Link className='bar-link' to='/'>
@@ -167,7 +177,7 @@ const Search = (props) => {
         {/* Header middle */}
         <div className={`header-middle${search ? '-up' : '-down'}`}>
           <div className={`${search ? 'hide' : 'logo-text'}`}>
-            <img className='logo' src={Logo} alt='Logo'/>
+            <img className='logo' src={Logo} alt='Logo' />
             <p className='text'>Reel in the movies</p>
           </div>
           {/* Search Input */}
@@ -228,8 +238,8 @@ const Search = (props) => {
           }}
         />
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </div>
   );
 };
