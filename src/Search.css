@@ -437,12 +437,16 @@ li {
 
 /*============================================*/
 
+
+
 .link {
   cursor: pointer;
   color: var(--main-link-color);
   text-decoration: underline;
 }
-
+.nounderline {
+  text-decoration: none !important;
+}
 li:nth-child(even) {
   background-color: var(--main-bg-color);
 }
@@ -589,6 +593,8 @@ li:nth-child(even) {
   font-weight: normal;
   font-size: 18px;
   line-height: 22px;
+  color: var(--main-text-color);
+  text-decoration-line: none;
 }
 
 .pageSubHeader {
@@ -602,32 +608,46 @@ li:nth-child(even) {
 
 /* Clear floats after image containers */
 .pageImagesRow {
-  display: flex;
-  width: 100%;
-
-  justify-content: space-between;
+  position: relative;
+   width: 100%;
+   padding-top: 50%;
+   display: flex;
 }
 
 /* Three image containers (use 25% for four, and 50% for two, etc) */
 .pageImagesColumn {
-  padding: 5px;
-  flex: 25%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(33.33% - 15px);
   overflow: hidden;
-  text-align: right;
+  padding: 5px;
+  margin: 5px;
+}
+.pageImagesColumn:first-child {
+left: 0;
+
 }
 
-.pageImagesColumnWide {
-  padding: 5px;
-  flex: calc(276 / 183);
-  overflow: hidden;
-  text-align: right;
+.pageImagesColumn:nth-child(2) {
+left: calc(33.33% - 2.5px);
+
+}
+
+.pageImagesColumn:last-child {
+right:0;
+
 }
 
 .pageImg {
-  width: 100%;
-  height: auto;
-  vertical-align: middle;
+height: 100%;
+width: auto;
+margin-left: 50%;
+transform: translateX(-50%);
+
 }
+
+
 
 /*================= ACTOR PAGE ===================*/
 
@@ -664,29 +684,6 @@ li:nth-child(even).filmography {
   background-color: rgb(213, 213, 213);
 }
 
-.mk1 {
-  flex: calc(191 / 263);
-}
-
-.mk2 {
-  flex: calc(276 / 183);
-}
-
-.mk3 {
-  flex: calc(201 / 251);
-}
-
-.bm1 {
-  flex: calc(67 / 100);
-}
-
-.bm2 {
-  flex: calc(973 / 1440);
-}
-
-.bm3 {
-  flex: calc(289 / 174);
-}
 
 /*================== Movie page======================*/
 

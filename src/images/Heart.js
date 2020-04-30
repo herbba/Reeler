@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const Heart = (props) => {
   const [className, setClassName] = useState("heart fill white")

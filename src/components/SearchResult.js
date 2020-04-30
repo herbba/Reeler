@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom/';
 import '../Search.css';
 import '../Search.css';
 import titleService from '../services/titles';
@@ -11,6 +10,9 @@ import Heart from '../images/Heart.js';
 import Netflix from '../images/netflix.png';
 import moviePlaceHolder from '../images/movie_placeholder.png';
 import personPlaceHolder from '../images/person_placeholder.png';
+import mockUp from '../mockup.js';
+import ItemLink from './ItemLink.js';
+
 
 const SearchResult = (props) => {
   const [loading, setLoading] = useState(false);
@@ -49,7 +51,7 @@ const SearchResult = (props) => {
     setTitles([]);
     const requests = movieIds
       .slice(0, mVisible)
-      .map((id) => titleService.getTitle(id));
+      .map((id) => mockUp.getMockup(id) ? mockUp.getMockup(id) : titleService.getTitle(id));
     axios
       .all(requests)
       .then(axios.spread((...responses) => setTitles(responses)));
@@ -61,7 +63,7 @@ const SearchResult = (props) => {
     setNames([]);
     const requests = actorIds
       .slice(0, aVisible)
-      .map((id) => nameService.getName(id));
+      .map((id) => mockUp.getMockup(id) ? mockUp.getMockup(id) : nameService.getName(id));
     axios
       .all(requests)
       .then(axios.spread((...responses) => setNames(responses)))
@@ -87,62 +89,24 @@ const SearchResult = (props) => {
       ? titles.map((t) => (
         <li key={t.tconst} className='searchListItem'>
           {/* When link clicked, switches routes */}
-          <img src={moviePlaceHolder} className="placeholder moviepl" />
+          <img src={mockUp.getMockup(t.tconst) ? require(`../images/${t.images[0]}.jpg`) : moviePlaceHolder} className="placeholder moviepl" alt="" />
           <div className='resultItem'>
-            <Link
-              to={{
-                pathname: `${baseUrl}${t.tconst}`,
-                state: {
-                  endyear: t.endyear,
-                  genres: t.genres,
-                  isadult: t.isadult,
-                  originaltitle: t.originaltitle,
-                  primarytitle: t.primarytitle,
-                  runtimeminutes: t.runtimeminutes,
-                  startyear: t.startyear,
-                  tconst: t.tconst,
-                  titletype: t.titletype,
-                },
-              }}
-            >
-              <p className='link'>
-                {t.primarytitle}
-              </p>
-            </Link>
-            <p className='leftPadding'>({t.startyear})</p>
+            <ItemLink type="tt" baseUrl="/titles/" id={t.tconst} year={true} />
           </div>
           <div className='searchActions'>
             <Heart />
-            <a href={`https://www.netflix.com/search?q=${t.primarytitle}`} target="_blank">
-              <img src={Netflix} className='netflix' />
+            <a href={`https://www.netflix.com/search?q=${t.primarytitle}`} target="_blank" rel="noopener noreferrer">
+              <img src={Netflix} className='netflix' alt="" />
             </a>
           </div>
         </li>
       ))
       : names.map((n) => (
         <li className='searchListItem actorlist' key={n.nconst}>
-          <img alt="actor image placeholder" src={personPlaceHolder} className=" placeholder personpl" />
+          <img alt="actor image placeholder" src={mockUp.getMockup(n.nconst) ? require(`../images/${n.images[0]}.jpg`) : personPlaceHolder} className=" placeholder personpl" />
           {/* When link clicked, switches routes */}
           <div className="resultItem">
-            <Link
-              to={{
-                pathname: `${baseUrl}${n.nconst}`,
-                state: {
-                  birthyear: n.birthyear,
-                  deathyear: n.deathyear,
-                  knownfortitles: n.knownfortitles,
-                  nconst: n.nconst,
-                  primaryname: n.primaryname,
-                  primaryprofession: n.primaryprofession,
-                  itemId: n.const,
-                },
-              }}
-            >
-              <p className='link'>
-                {n.primaryname}
-              </p>
-            </Link>
-            <p className='leftPadding'>({n.birthyear})</p>
+            <ItemLink type="nm" baseUrl="/names/" id={n.nconst} year={true} />
           </div>
         </li>
 

@@ -166,7 +166,7 @@ const Search = (props) => {
           {/* Header logo + text */}
           <Link className='bar-link' to='/'>
             <div onClick={handleReturn} className={`header-logo-text${search ? '' : ' hide'}`}>
-              <img src={LogoSmall} className='header-logo-small'></img>
+              <img src={LogoSmall} className='header-logo-small' alt="reeler logo"></img>
               <div>
                 <div className='header-logo-label'>ReelGeek</div>
                 <div className='header-logo-motto'>Reel in the movies</div>
