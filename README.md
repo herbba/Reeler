@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This wont run its an old school project and the server was rented
 
 ## Available Scripts
 
